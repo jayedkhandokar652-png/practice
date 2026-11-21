@@ -1,0 +1,2318 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Rearrange Practice</title>
+<script>
+(function(){try{var s=JSON.parse(localStorage.getItem("rp.v2")||"{}");var t=s.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light");document.documentElement.setAttribute("data-theme",t);}catch(e){}})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f2ea; --bg2:#ece7da; --bgt:rgba(245,242,234,.78);
+  --surface:rgba(255,255,255,.72); --surface-2:rgba(255,255,255,.92); --solid:#ffffff;
+  --ink:#10222a; --ink-2:#2c424b; --muted:#667c84;
+  --line:rgba(16,34,42,.11); --line-2:rgba(16,34,42,.06);
+  --a1:#0a6c78; --a2:#14a89c; --a-soft:rgba(20,168,156,.12);
+  --gold:#bf8a1c; --gold-2:#f0c25a; --gold-soft:rgba(191,138,28,.16);
+  --ok:#17824f; --ok-soft:rgba(23,130,79,.12); --bad:#c0392b; --bad-soft:rgba(192,57,43,.11);
+  --paper:#fffdf6; --rule:rgba(10,108,120,.15); --margin:rgba(192,57,43,.32); --hole:#e9e2d0;
+  --sh-1:0 1px 2px rgba(16,34,42,.05),0 10px 26px -8px rgba(16,34,42,.10);
+  --sh-2:0 2px 6px rgba(16,34,42,.06),0 28px 54px -16px rgba(16,34,42,.20);
+  --serif:"Fraunces","Newsreader",Georgia,"Times New Roman",serif;
+  --text:"Newsreader",Georgia,"Times New Roman",serif;
+  --sans:"Hind Siliguri","Noto Sans Bengali","Segoe UI",system-ui,-apple-system,sans-serif;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --grad:linear-gradient(135deg,var(--a1),var(--a2));
+  --grad-gold:linear-gradient(135deg,var(--gold),var(--gold-2));
+  --noise:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#050d11; --bg2:#091820; --bgt:rgba(5,13,17,.78);
+  --surface:rgba(20,38,45,.62); --surface-2:rgba(22,42,50,.9); --solid:#13262c;
+  --ink:#e9f4f2; --ink-2:#c3d7d5; --muted:#8aa4a8;
+  --line:rgba(150,220,212,.15); --line-2:rgba(150,220,212,.07);
+  --a1:#2cbcb0; --a2:#62e6d4; --a-soft:rgba(98,230,212,.12);
+  --gold:#e9bd59; --gold-2:#ffd98a; --gold-soft:rgba(233,189,89,.15);
+  --ok:#62d9a3; --ok-soft:rgba(98,217,163,.13); --bad:#ff9082; --bad-soft:rgba(255,144,130,.13);
+  --paper:#15272d; --rule:rgba(98,230,212,.10); --margin:rgba(255,144,130,.32); --hole:#091820;
+  --sh-1:0 1px 2px rgba(0,0,0,.45),0 10px 26px -8px rgba(0,0,0,.5);
+  --sh-2:0 2px 6px rgba(0,0,0,.5),0 28px 54px -16px rgba(0,0,0,.7);
+  color-scheme:dark;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{background:var(--bg);scroll-behavior:smooth}
+body{margin:0;min-height:100vh;color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+button:disabled{cursor:default}
+[hidden]{display:none!important}
+
+/* ---------- ব্যাকগ্রাউন্ড ---------- */
+.bgfx{position:fixed;inset:0;z-index:-2;overflow:hidden;background:linear-gradient(180deg,var(--bg),var(--bg2))}
+.blob{position:absolute;border-radius:50%;filter:blur(80px);will-change:transform}
+.b1{width:48vw;height:48vw;min-width:340px;min-height:340px;right:-12vw;top:-16vw;background:radial-gradient(circle,#2fd0bd,transparent 68%);opacity:.55;animation:drift1 24s ease-in-out infinite alternate}
+.b2{width:42vw;height:42vw;min-width:300px;min-height:300px;left:-14vw;top:22vh;background:radial-gradient(circle,#f3c969,transparent 68%);opacity:.40;animation:drift2 28s ease-in-out infinite alternate}
+.b3{width:52vw;height:52vw;min-width:340px;min-height:340px;left:28vw;bottom:-28vw;background:radial-gradient(circle,#5b7cff,transparent 68%);opacity:.24;animation:drift3 32s ease-in-out infinite alternate}
+:root[data-theme="dark"] .b1{opacity:.30}
+:root[data-theme="dark"] .b2{opacity:.14}
+:root[data-theme="dark"] .b3{opacity:.20}
+@keyframes drift1{to{transform:translate(-7vw,9vh) scale(1.12)}}
+@keyframes drift2{to{transform:translate(8vw,-6vh) scale(1.1)}}
+@keyframes drift3{to{transform:translate(-9vw,-7vh) scale(1.15)}}
+.grain{position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.05;mix-blend-mode:multiply;background-image:var(--noise)}
+:root[data-theme="dark"] .grain{mix-blend-mode:screen;opacity:.035}
+#fx{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:90}
+
+.wrap{max-width:1040px;margin:0 auto;padding:calc(18px + env(safe-area-inset-top)) 16px 64px;transition:max-width .3s}
+body[data-view="practice"] .wrap{max-width:820px}
+
+/* ---------- টপবার ---------- */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.brand{display:flex;align-items:center;gap:11px;font:600 1.12rem/1 var(--serif);letter-spacing:-.01em}
+.logo{width:38px;height:38px;border-radius:12px;background:var(--grad);display:grid;place-items:center;box-shadow:0 10px 22px -6px rgba(20,168,156,.6),inset 0 1px 0 rgba(255,255,255,.35)}
+.logo svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.icon-btn{width:42px;height:42px;border-radius:13px;border:1px solid var(--line);background:var(--surface);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  display:grid;place-items:center;color:var(--ink);box-shadow:var(--sh-1);transition:transform .25s var(--ease),border-color .2s,color .2s}
+.icon-btn:hover{transform:translateY(-2px);border-color:var(--a2);color:var(--a1)}
+.icon-btn svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.i-sun{display:none}
+:root[data-theme="dark"] .i-sun{display:block}
+:root[data-theme="dark"] .i-moon{display:none}
+:focus-visible{outline:2px solid var(--a2);outline-offset:3px}
+
+/* ---------- হিরো ---------- */
+.hero{position:relative;display:grid;grid-template-columns:1.15fr .85fr;gap:20px;align-items:center;margin:6px 0 26px}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;padding:7px 14px 7px 12px;border-radius:99px;background:var(--surface);border:1px solid var(--line);color:var(--a1);font:600 .8rem/1 var(--sans);letter-spacing:.03em;backdrop-filter:blur(10px);box-shadow:var(--sh-1)}
+.eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--a2);box-shadow:0 0 0 4px var(--a-soft);animation:beat 2.4s ease-in-out infinite}
+@keyframes beat{50%{box-shadow:0 0 0 8px transparent}}
+.hero h1{margin:18px 0 12px;font:600 clamp(2.7rem,8.2vw,4.9rem)/.98 var(--serif);letter-spacing:-.04em}
+.hero h1 em{display:block;font-style:italic;font-weight:500;padding-right:.08em;background:linear-gradient(100deg,var(--a1),var(--a2) 48%,var(--gold) 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:0;color:var(--muted);font-size:1.05rem;max-width:44ch}
+.hero-deco{position:relative;height:218px}
+.dc{position:absolute;left:50%;width:min(270px,92%);display:flex;align-items:center;gap:13px;padding:15px 16px;border-radius:18px;background:var(--surface-2);border:1px solid var(--line);box-shadow:var(--sh-2);backdrop-filter:blur(10px)}
+.dc b{flex:0 0 30px;height:30px;border-radius:10px;display:grid;place-items:center;color:#fff;font:700 .86rem/1 var(--sans);background:var(--grad)}
+.dc span{flex:1;display:grid;gap:8px}
+.dc span i{height:7px;border-radius:4px;background:var(--line)}
+.dc span i:last-child{width:60%}
+.d1{top:0;transform:translateX(-64%) rotate(-5deg);animation:fl1 7s ease-in-out infinite}
+.d2{top:70px;transform:translateX(-36%) rotate(3.5deg);animation:fl2 8s ease-in-out infinite}.d2 b{background:var(--grad-gold)}
+.d3{top:140px;transform:translateX(-58%) rotate(-2deg);animation:fl3 9s ease-in-out infinite}.d3 b{background:linear-gradient(135deg,#3447c9,#6b83ff)}
+@keyframes fl1{50%{transform:translateX(-64%) translateY(-9px) rotate(-6.5deg)}}
+@keyframes fl2{50%{transform:translateX(-36%) translateY(8px) rotate(2.5deg)}}
+@keyframes fl3{50%{transform:translateX(-58%) translateY(-7px) rotate(-3deg)}}
+
+/* ---------- পরিসংখ্যান ও CTA ---------- */
+.bento{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+.tile{position:relative;padding:16px 16px 14px;border-radius:22px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);overflow:hidden}
+.tile::after{content:"";position:absolute;right:-28px;top:-28px;width:104px;height:104px;border-radius:50%;background:radial-gradient(circle,var(--a-soft),transparent 70%)}
+.tile.g::after{background:radial-gradient(circle,var(--gold-soft),transparent 70%)}
+.tile.i::after{background:radial-gradient(circle,rgba(91,115,245,.16),transparent 70%)}
+.t-ic{position:relative;z-index:1;width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:var(--a-soft);color:var(--a1);margin-bottom:12px}
+.t-ic svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+.tile.g .t-ic{background:var(--gold-soft);color:var(--gold)}
+.tile.i .t-ic{background:rgba(91,115,245,.14);color:#5b73f5}
+.tile b{position:relative;z-index:1;display:block;font:600 2.1rem/1 var(--serif);letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.tile .l{position:relative;z-index:1;display:block;margin-top:5px;font-size:.82rem;color:var(--muted)}
+.cta{position:relative;display:flex;align-items:center;gap:16px;width:100%;margin-bottom:28px;padding:20px 22px 22px;border:0;border-radius:24px;text-align:left;color:#fff;overflow:hidden;
+  background:linear-gradient(118deg,#08505b,#0d8883 55%,#14a89c);box-shadow:0 22px 44px -18px rgba(10,108,120,.7);transition:transform .3s var(--ease),box-shadow .3s}
+.cta::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 130% at 100% 0,rgba(240,194,90,.5),transparent 60%),radial-gradient(40% 90% at 0 100%,rgba(255,255,255,.16),transparent 60%)}
+.cta::after{content:"";position:absolute;inset:0;background-image:var(--noise);opacity:.08;mix-blend-mode:overlay}
+.cta:hover{transform:translateY(-3px);box-shadow:0 30px 56px -18px rgba(10,108,120,.8)}
+.cta:active{transform:scale(.99)}
+.cta>*{position:relative;z-index:1}
+.cta-ic{flex:0 0 56px;height:56px;border-radius:18px;display:grid;place-items:center;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.3);backdrop-filter:blur(6px)}
+.cta-ic svg{width:24px;height:24px;fill:#fff;margin-left:3px}
+.cta-t{flex:1;min-width:0}
+.cta-t small{display:block;opacity:.85;font-size:.82rem;letter-spacing:.03em}
+.cta-t b{display:block;font:600 clamp(1.15rem,3.6vw,1.55rem)/1.25 var(--serif);letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cta-go{flex:0 0 42px;height:42px;border-radius:50%;display:grid;place-items:center;background:#fff;color:#0a6c78;transition:transform .3s var(--ease)}
+.cta-go svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.cta:hover .cta-go{transform:translateX(4px)}
+.cta-bar{position:absolute;left:0;right:0;bottom:0;height:6px;background:rgba(255,255,255,.2);z-index:1}
+.cta-bar i{display:block;height:100%;width:0;border-radius:0 6px 6px 0;background:linear-gradient(90deg,#fff,var(--gold-2));transition:width 1s var(--ease)}
+
+/* ---------- টুলবার ---------- */
+.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
+.search{flex:1 1 240px;position:relative}
+.search svg{position:absolute;z-index:1;pointer-events:none;left:15px;top:50%;transform:translateY(-50%);width:18px;height:18px;stroke:var(--muted);fill:none;stroke-width:2;stroke-linecap:round}
+.search input{width:100%;padding:13px 16px 13px 44px;border-radius:15px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 .98rem var(--sans);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);box-shadow:var(--sh-1);transition:border-color .2s,box-shadow .2s}
+.search input::placeholder{color:var(--muted)}
+.search input:focus{outline:none;border-color:var(--a2);box-shadow:0 0 0 4px var(--a-soft)}
+.pills{display:flex;gap:4px;padding:4px;border-radius:15px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-1);backdrop-filter:blur(12px)}
+.pill{border:0;background:transparent;padding:9px 16px;border-radius:11px;font:600 .88rem/1 var(--sans);color:var(--muted);transition:background .25s,color .25s,box-shadow .25s}
+.pill:hover{color:var(--ink)}
+.pill[aria-pressed="true"]{background:var(--grad);color:#fff;box-shadow:0 6px 14px -4px rgba(20,168,156,.55)}
+
+/* ---------- বিষয়ের কার্ড ---------- */
+.grid{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,340px),1fr));gap:12px}
+.grid>li{display:flex}
+.card{--c1:#0a6c78;--c2:#14a89c;--rgb:20,168,156;position:relative;display:flex;align-items:center;gap:15px;width:100%;padding:16px;text-align:left;overflow:hidden;
+  border-radius:22px;border:1px solid var(--line);background:var(--surface);box-shadow:var(--sh-1);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  transition:transform .3s var(--ease),box-shadow .3s,border-color .3s}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(120% 150% at 0 0,rgba(var(--rgb),.17),transparent 58%);opacity:0;transition:opacity .35s}
+.card:hover{transform:translateY(-4px);border-color:rgba(var(--rgb),.5);box-shadow:0 2px 6px rgba(0,0,0,.06),0 28px 50px -18px rgba(var(--rgb),.45)}
+.card:hover::before{opacity:1}
+.card:active{transform:scale(.99)}
+.badge{position:relative;flex:0 0 52px;height:52px;border-radius:17px;display:grid;place-items:center;background:linear-gradient(135deg,var(--c1),var(--c2));color:#fff;font:600 1.18rem/1 var(--serif);box-shadow:0 10px 20px -8px rgba(var(--rgb),.75),inset 0 1px 0 rgba(255,255,255,.3)}
+.badge svg{width:22px;height:22px;stroke:#fff;fill:none;stroke-width:2.7;stroke-linecap:round;stroke-linejoin:round}
+.c-body{position:relative;flex:1;min-width:0}
+.c-body b{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font:600 1.1rem/1.3 var(--serif);letter-spacing:-.005em}
+.c-meta{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;margin-top:5px;font-size:.8rem;color:var(--muted)}
+.stars{display:inline-flex;gap:1px;font-size:.88rem;line-height:1;color:var(--line)}
+.stars .on{color:var(--gold)}
+.mring{position:relative;flex:0 0 46px;height:46px}
+.mring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.mring circle{fill:none;stroke-width:4.5;stroke-linecap:round}
+.mring .tr{stroke:var(--line)}
+.mring .fg{stroke:var(--c2);stroke-dasharray:113.1;transition:stroke-dashoffset 1s var(--ease) .15s}
+.mring span{position:absolute;inset:0;display:grid;place-items:center;font:700 .66rem/1 var(--sans);color:var(--ink-2);font-variant-numeric:tabular-nums}
+.mring .go{font-size:1.25rem;font-weight:400;color:var(--muted);transition:transform .3s var(--ease),color .2s}
+.card:hover .mring .go{transform:translateX(3px);color:rgba(var(--rgb),1)}
+.empty{grid-column:1/-1;display:block;text-align:center;padding:44px 10px;color:var(--muted)}
+.foot{display:flex;justify-content:center;margin-top:30px}
+.linkbtn{background:transparent;border:0;padding:8px 14px;border-radius:10px;color:var(--muted);font:500 .84rem var(--sans);text-decoration:underline;text-underline-offset:3px}
+.linkbtn:hover{color:var(--bad)}
+
+/* ---------- সম্পন্ন ও সন্দেহ চিহ্ন ---------- */
+.pills{max-width:100%;overflow-x:auto;scrollbar-width:none}
+.pills::-webkit-scrollbar{display:none}
+.pill{display:inline-flex;align-items:center;white-space:nowrap}
+.pn{margin-left:7px;min-width:20px;padding:3px 6px;border-radius:99px;background:var(--line-2);color:var(--muted);font:700 .72rem/1.1 var(--sans);text-align:center;font-variant-numeric:tabular-nums;transition:background .25s,color .25s}
+.pill[data-f="done"] .pn.has{background:rgba(23,130,79,.14);color:var(--ok)}
+.pill[data-f="doubt"] .pn.has{background:var(--gold-soft);color:var(--gold)}
+.pill[aria-pressed="true"][data-f] .pn{background:rgba(255,255,255,.26);color:#fff}
+@media (max-width:400px){.pill{padding:9px 11px;font-size:.84rem}.pn{margin-left:5px;padding:3px 5px}}
+
+/* কার্ড: লিফটটা li-তে, যাতে ⋯ বোতাম কার্ডের সাথেই ওঠে */
+.grid>li{position:relative;transition:transform .3s var(--ease)}
+.grid>li .card:hover:not(:active){transform:none}
+@media (hover:hover){.grid>li:hover{transform:translateY(-4px)}}
+.card.done{border-color:rgba(23,130,79,.42)}
+.card.done .badge{background:linear-gradient(135deg,#17824f,#2fbf86);box-shadow:0 10px 20px -8px rgba(23,130,79,.7),inset 0 1px 0 rgba(255,255,255,.3)}
+.card.doubt{border-color:rgba(201,146,28,.65);box-shadow:var(--sh-1),0 0 0 3px var(--gold-soft)}
+.card.doubt:hover{box-shadow:0 2px 6px rgba(0,0,0,.06),0 28px 50px -18px rgba(var(--rgb),.45),0 0 0 3px var(--gold-soft)}
+.badge .fdot{position:absolute;right:-6px;top:-6px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#c9921c,#e2ab3c);box-shadow:0 0 0 3px var(--paper)}
+.badge .fdot svg{width:12px;height:12px;stroke:#fff;fill:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.cst{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:99px;font:700 .72rem/1 var(--sans)}
+.cst svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.cst.todo{background:var(--line-2);color:var(--muted)}
+.cst.ok{background:var(--ok-soft);color:var(--ok)}
+.cst.warn{background:var(--gold-soft);color:var(--gold)}
+.cst.warn svg{fill:currentColor;stroke-width:2}
+.mring .okmark{font-size:1.3rem;font-weight:700;color:var(--ok)}
+.card.done .mring .fg{stroke:var(--ok)}
+
+/* কার্ডের কোণের ⋯ বোতাম: শান্ত, কিন্তু চোখে পড়ে */
+.more{position:absolute;top:4px;right:4px;z-index:3;width:32px;height:32px;border-radius:50%;border:0;background:transparent;color:var(--muted);display:grid;place-items:center;
+  transition:background .2s,color .2s,opacity .2s,transform .2s var(--ease)}
+.more::before{content:"";position:absolute;inset:-4px}
+.more svg{width:18px;height:18px;fill:currentColor}
+.more:hover,.more[aria-expanded="true"]{background:var(--a-soft);color:var(--a1)}
+.more:active{transform:scale(.92)}
+@media (hover:hover){.more{opacity:.6}.grid>li:hover .more,.more:focus-visible,.more[aria-expanded="true"]{opacity:1}}
+
+/* পপ-ওভার মেনু */
+.menu{position:fixed;z-index:120;left:0;top:0;width:262px;max-width:calc(100vw - 16px);padding:6px;border-radius:18px;background:var(--surface-2);border:1px solid var(--line);box-shadow:var(--sh-2);
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-4px) scale(.96);transform-origin:var(--ox,100%) var(--oy,0%);
+  transition:opacity .16s,transform .22s var(--ease),visibility 0s .22s}
+.menu.open{opacity:1;visibility:visible;pointer-events:auto;transform:none;transition:opacity .16s,transform .22s var(--ease),visibility 0s}
+.menu-hd{padding:7px 12px 6px;font:600 .74rem/1.3 var(--sans);color:var(--muted);letter-spacing:.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mi{width:100%;display:flex;align-items:center;gap:12px;padding:9px 10px;border:0;border-radius:13px;background:transparent;color:var(--ink);text-align:left;font:600 .92rem/1.25 var(--sans);transition:background .15s}
+.mi:hover,.mi:focus-visible{background:var(--a-soft);outline:none}
+.mi:active{transform:scale(.985)}
+.mic{flex:0 0 32px;height:32px;border-radius:11px;display:grid;place-items:center;background:var(--line-2);color:var(--muted);transition:background .2s,color .2s}
+.mic svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
+.mtx{display:flex;flex-direction:column;gap:2px;min-width:0}
+.mi small{font:500 .76rem/1.3 var(--sans);color:var(--muted)}
+.mi.on[data-a="done"] .mic{background:#17824f;color:#fff}
+.mi.on[data-a="doubt"] .mic{background:#c9921c;color:#fff}
+.mi.on[data-a="doubt"] .mic svg{fill:currentColor;stroke-width:2}
+
+/* অনুশীলন পাতা: শিরোনামের পাশে ছোট স্ট্যাটাস ট্যাগ */
+.crow{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+.crow .crumb{margin:0}
+.stchip{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;padding:4px 9px 4px 5px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--muted);font:600 .8rem/1 var(--sans);
+  box-shadow:var(--sh-1);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:background .25s,color .25s,border-color .25s,transform .2s var(--ease)}
+.stchip:hover{border-color:var(--a2)}
+.stchip:active{transform:scale(.97)}
+.stchip .sti{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;border:2px solid var(--line);transition:background .25s,border-color .25s}
+.stchip .sti svg{width:11px;height:11px;stroke:#fff;fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.stchip .chev{display:grid;place-items:center;opacity:.7;transition:transform .25s var(--ease)}
+.stchip .chev svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.stchip[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.stchip.s-done{background:var(--ok-soft);border-color:rgba(23,130,79,.4);color:var(--ok)}
+.stchip.s-done .sti{background:#17824f;border-color:#17824f}
+.stchip.s-doubt{background:var(--gold-soft);border-color:rgba(201,146,28,.55);color:var(--gold)}
+.stchip.s-doubt .sti{background:#c9921c;border-color:#c9921c}
+.stchip.s-doubt .sti svg{fill:#fff;stroke-width:2}
+
+/* ফলাফলের পাতার সন্দেহ বোতাম */
+.btn.ghost.flagged{background:var(--gold-soft);border-color:rgba(201,146,28,.55);color:var(--gold)}
+.btn.ghost.flagged:hover{border-color:var(--gold)}
+.btn.ghost.flagged svg{fill:currentColor}
+
+/* ---------- অনুশীলন: হেডার ---------- */
+#practice{--c1:#0a6c78;--c2:#14a89c;--rgb:20,168,156}
+.ptop{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.spacer{flex:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:13px;padding:12px 20px;font:600 .94rem/1 var(--sans);white-space:nowrap;transition:transform .2s var(--ease),filter .2s,box-shadow .25s,border-color .2s}
+.btn:active{transform:scale(.97)}
+.btn svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.btn.primary{background:var(--grad);color:#fff;box-shadow:0 12px 24px -8px rgba(20,168,156,.65),inset 0 1px 0 rgba(255,255,255,.3)}
+.btn.primary:hover{filter:brightness(1.07);transform:translateY(-2px)}
+.btn.ghost{background:var(--surface);border:1px solid var(--line);color:var(--ink);box-shadow:var(--sh-1);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px)}
+.btn.ghost:hover{border-color:var(--a2);transform:translateY(-2px)}
+.btn.sm{padding:9px 14px;font-size:.85rem;border-radius:11px}
+.ptitle{margin:2px 0 16px}
+.crumb{margin:0 0 4px;font-size:.84rem;color:var(--muted);letter-spacing:.02em}
+.ptitle h2{margin:0;font:600 clamp(1.75rem,5.6vw,2.75rem)/1.08 var(--serif);letter-spacing:-.03em}
+
+/* ---------- HUD ---------- */
+.hud{position:sticky;top:0;z-index:30;margin:0 0 14px;padding:10px 0}
+.hud::before{content:"";position:absolute;top:0;bottom:-10px;left:50%;width:100vw;margin-left:-50vw;z-index:-1;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:var(--bgt);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);-webkit-mask-image:linear-gradient(#000 68%,transparent);mask-image:linear-gradient(#000 68%,transparent)}
+.hud.stuck::before{opacity:1}
+.hud-in{display:flex;align-items:center;gap:16px;padding:12px 16px;border-radius:20px;background:var(--surface-2);border:1px solid var(--line);box-shadow:var(--sh-1);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
+.segs{display:flex;gap:4px;flex:1;min-width:0}
+.segs i{flex:1;height:8px;border-radius:5px;background:var(--line);transition:background .4s var(--ease),transform .4s var(--ease),box-shadow .4s}
+.segs i.on{background:linear-gradient(90deg,var(--c1),var(--c2));transform:scaleY(1.35);box-shadow:0 0 12px rgba(var(--rgb),.55)}
+.chips{display:flex;gap:6px;flex:0 0 auto}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:7px 11px;border-radius:99px;background:var(--a-soft);font:600 .82rem/1 var(--sans);color:var(--ink-2);white-space:nowrap;font-variant-numeric:tabular-nums}
+.chip svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.chip.ok svg{color:var(--ok)}
+.chip.x{background:var(--bad-soft)}.chip.x svg{color:var(--bad)}
+.chip.s{background:var(--gold-soft)}.chip.s svg{color:var(--gold)}
+.chip.s.hot{animation:flame .7s var(--ease)}
+.chip.s.hot svg{fill:var(--gold-2)}
+.chip.t svg{color:var(--a1)}
+@keyframes flame{40%{transform:scale(1.18)}}
+
+/* ---------- কোচের বার্তা ---------- */
+.coach{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding:11px 16px 11px 11px;border-radius:18px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-1);font-size:.96rem;line-height:1.55;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:background .3s,border-color .3s}
+.co-ic{flex:0 0 32px;height:32px;border-radius:11px;display:grid;place-items:center;background:var(--a-soft);color:var(--a1);transition:background .3s,color .3s}
+.co-ic svg{display:none;width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.coach .ci-n{display:block}
+.coach.good{background:var(--ok-soft);border-color:rgba(23,130,79,.32)}
+.coach.good .co-ic{background:var(--ok);color:#fff}
+.coach.good .ci-n,.coach.bad .ci-n{display:none}
+.coach.good .ci-g{display:block}
+.coach.bad{background:var(--bad-soft);border-color:rgba(192,57,43,.32);animation:nudge .45s}
+.coach.bad .co-ic{background:var(--bad);color:#fff}
+.coach.bad .ci-b{display:block}
+@keyframes nudge{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}60%{transform:translateX(5px)}}
+
+/* ---------- স্টেজ ---------- */
+.stage{display:grid;gap:18px}
+.opts-hd{display:flex;align-items:center;justify-content:space-between;margin:0 4px 12px;font-size:.88rem;color:var(--muted)}
+.opts-hd b{color:var(--ink);font-weight:600}
+.kbd-hint{display:none;align-items:center;gap:6px}
+.kbd-hint kbd{padding:3px 7px;border-radius:7px;border:1px solid var(--line);background:var(--surface);font:600 .74rem/1 var(--sans);color:var(--ink-2)}
+@media (hover:hover){.kbd-hint{display:inline-flex}}
+
+/* ---------- খাতার কাগজ ---------- */
+.sheet{--ml:58px;position:relative;margin:14px 0 0;padding:30px 0 26px;background:var(--paper);border:1px solid var(--line);border-radius:8px 22px 22px 8px;box-shadow:var(--sh-2);transition:box-shadow .6s,border-color .6s}
+.sheet::before{content:"";position:absolute;top:0;bottom:0;left:var(--ml);width:2px;background:var(--margin)}
+.sheet::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:.06;mix-blend-mode:multiply;background-image:var(--noise)}
+:root[data-theme="dark"] .sheet::after{mix-blend-mode:screen;opacity:.04}
+.sheet.complete{border-color:var(--gold);box-shadow:0 0 0 5px var(--gold-soft),var(--sh-2)}
+.holes{position:absolute;left:14px;top:0;bottom:0;width:20px;pointer-events:none;background:
+  radial-gradient(circle at 10px 16%,var(--hole) 0 6px,rgba(0,0,0,.16) 6.5px,transparent 7.5px),
+  radial-gradient(circle at 10px 50%,var(--hole) 0 6px,rgba(0,0,0,.16) 6.5px,transparent 7.5px),
+  radial-gradient(circle at 10px 84%,var(--hole) 0 6px,rgba(0,0,0,.16) 6.5px,transparent 7.5px)}
+.tape{position:absolute;top:-13px;left:50%;width:124px;height:28px;margin-left:-62px;transform:rotate(-2.5deg);z-index:3;box-shadow:0 3px 8px rgba(0,0,0,.14);opacity:.94;
+  background:repeating-linear-gradient(115deg,rgba(240,194,90,.9) 0 10px,rgba(255,238,178,.9) 10px 20px);
+  clip-path:polygon(0 0,100% 0,98% 25%,100% 50%,98% 75%,100% 100%,0 100%,2% 75%,0 50%,2% 25%)}
+:root[data-theme="dark"] .tape{opacity:.75}
+.sheet-hd{position:relative;z-index:2;display:flex;align-items:center;gap:10px;margin:0 22px 8px calc(var(--ml) + 18px);padding-bottom:10px;border-bottom:3px double var(--line)}
+.sheet-hd span{flex:1;min-width:0;font:italic 600 1.15rem/1.3 var(--serif);color:var(--a1)}
+.assembled{position:relative;z-index:2;min-height:calc(2.1rem*4);padding:0 22px 0 calc(var(--ml) + 18px);font:1.08rem/2.1rem var(--text);color:var(--ink);
+  background:repeating-linear-gradient(to bottom,transparent 0,transparent calc(2.1rem - 1px),var(--rule) calc(2.1rem - 1px),var(--rule) 2.1rem);background-position:0 -5px;background-attachment:local}
+.assembled .ph{color:var(--muted);font-style:italic}
+.assembled .s{padding:1px 3px;border-radius:4px;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+.assembled .s.new{animation:mark 3s ease-out}
+.assembled .no{display:inline-block;position:relative;top:-.5em;margin-right:5px;padding:2px 6px;border-radius:99px;background:var(--a-soft);color:var(--a1);font:700 .64rem/1 var(--sans);vertical-align:baseline}
+@keyframes mark{0%,60%{background:var(--gold-soft)}100%{background:transparent}}
+
+/* ---------- পড়ে শোনানো ---------- */
+.spk{flex:0 0 auto;display:inline-flex;align-items:stretch}
+.spk b{font:inherit}
+.spk.has-pick .btn{border-radius:11px 0 0 11px}
+.spk .btn.ghost:hover{transform:none}
+#speakBtn[aria-pressed="true"]{background:var(--a-soft);border-color:var(--a2);color:var(--a1)}
+#speakBtn[aria-pressed="true"] .w1{animation:wv 1s ease-in-out infinite}
+#speakBtn[aria-pressed="true"] .w2{animation:wv 1s .25s ease-in-out infinite}
+@keyframes wv{0%,100%{opacity:.2}50%{opacity:1}}
+.vpick{position:relative;display:grid;place-items:center;width:34px;border:1px solid var(--line);border-left:0;border-radius:0 11px 11px 0;background:var(--surface);color:var(--muted);box-shadow:var(--sh-1);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);cursor:pointer;transition:color .2s,background .2s}
+.vpick svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.vpick select{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer;font-size:16px;border:0;background:transparent}
+.vpick:hover{color:var(--a1);background:var(--a-soft)}
+.vpick:focus-within{outline:2px solid var(--a2);outline-offset:2px}
+.gdlg{position:fixed;inset:0;z-index:140;display:none;place-items:center;padding:20px;background:rgba(0,0,0,.5)}
+.gdlg.show{display:grid}
+.gbox{width:min(100%,380px);padding:20px;border-radius:20px;background:var(--solid);border:1px solid var(--line);box-shadow:var(--sh-2);color:var(--ink)}
+.gbox h3{margin:0 0 8px;font:700 1.05rem/1.3 var(--sans)}
+.gbox p{margin:0 0 12px;font:500 .86rem/1.6 var(--sans);color:var(--muted)}
+.gbox input{width:100%;box-sizing:border-box;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:16px}
+.gact{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.toast{position:fixed;left:50%;bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:130;width:max-content;max-width:min(92vw,420px);transform:translate(-50%,16px);opacity:0;pointer-events:none;padding:12px 16px;border-radius:14px;
+  background:var(--solid);color:var(--ink);border:1px solid var(--line);box-shadow:var(--sh-2);font:600 .9rem/1.5 var(--sans);text-align:center;transition:opacity .25s,transform .3s var(--ease)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.assembled .s.speaking{background:rgba(var(--rgb),.2);box-shadow:0 0 0 3px rgba(var(--rgb),.2);transition:background .25s,box-shadow .25s}
+.stamp{position:absolute;right:22px;bottom:20px;z-index:4;padding:7px 15px;border:3px solid var(--ok);border-radius:11px;box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--ok);color:var(--ok);font:700 1.1rem/1 var(--sans);letter-spacing:.06em;opacity:0;transform:rotate(-10deg) scale(2.2);pointer-events:none}
+.sheet.complete .stamp{opacity:.82;transform:rotate(-10deg) scale(1);transition:opacity .25s .55s,transform .5s cubic-bezier(.3,1.6,.5,1) .55s}
+
+/* ---------- অপশন ---------- */
+.opt{position:relative;display:flex;gap:14px;align-items:flex-start;width:100%;margin:0 0 10px;padding:15px 16px;text-align:left;background:var(--surface-2);color:var(--ink);border:1px solid var(--line);border-radius:18px;box-shadow:var(--sh-1);font:1.04rem/1.55 var(--text);overflow:hidden;
+  transition:transform .25s var(--ease),border-color .2s,background .25s,box-shadow .25s,height .45s var(--ease),margin .45s var(--ease),padding .45s var(--ease),opacity .3s,border-width .3s}
+.opt::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--c1),var(--c2));opacity:0;transition:opacity .25s}
+.opt:hover{transform:translateY(-2px);border-color:rgba(var(--rgb),.55);box-shadow:var(--sh-2)}
+.opt:hover::before{opacity:1}
+.opt:active{transform:scale(.99)}
+.key{flex:0 0 28px;height:28px;border-radius:9px;display:grid;place-items:center;background:var(--a-soft);color:var(--a1);font:700 .8rem/1 var(--sans)}
+@media (hover:none){.key{display:none}}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.right .key{background:var(--ok);color:#fff}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft);animation:nudge .42s}
+.opt.wrong .key{background:var(--bad);color:#fff}
+.opt.used{height:0!important;margin-top:0;margin-bottom:0;padding-top:0;padding-bottom:0;opacity:0;border-width:0;pointer-events:none;transform:scale(.97)}
+.opt.fly{position:fixed;margin:0!important;z-index:80;pointer-events:none;transform-origin:0 0;background:var(--solid)!important;border-color:var(--ok)!important;box-shadow:0 24px 44px -10px rgba(0,0,0,.35)}
+
+/* ---------- ফলাফল ---------- */
+.result{display:none;position:relative;padding:24px;border-radius:28px;border:2px solid transparent;overflow:hidden;box-shadow:var(--sh-2);
+  background:linear-gradient(var(--solid),var(--solid)) padding-box,linear-gradient(135deg,var(--gold),var(--a2),var(--gold-2)) border-box}
+.result::before{content:"";position:absolute;inset:0;background:radial-gradient(70% 90% at 100% 0,var(--gold-soft),transparent 60%),radial-gradient(60% 80% at 0 100%,var(--a-soft),transparent 60%);pointer-events:none}
+.result>*{position:relative}
+.result.show{display:block;animation:rise .7s var(--ease)}
+@keyframes rise{from{opacity:0;transform:translateY(18px) scale(.98)}}
+.res-top{display:flex;align-items:center;gap:22px}
+.ring{position:relative;width:116px;height:116px;flex:0 0 116px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:9;stroke-linecap:round}
+.ring .tr{stroke:var(--line)}
+.ring .fg{stroke:url(#rg);stroke-dasharray:276.46;stroke-dashoffset:276.46;transition:stroke-dashoffset 1.5s var(--ease) .25s}
+.ring b{position:absolute;inset:0;display:grid;place-items:center;font:600 1.75rem/1 var(--serif);letter-spacing:-.02em}
+.res-t h3{margin:0 0 6px;font:600 1.55rem/1.2 var(--serif);letter-spacing:-.02em}
+.res-t p{margin:8px 0 0;color:var(--muted);font-size:.92rem;line-height:1.5}
+.res-stars{display:flex;gap:5px;font-size:1.7rem;line-height:1}
+.res-stars span{color:var(--line)}
+.res-stars .on{color:var(--gold);text-shadow:0 0 20px var(--gold-soft);animation:pop .65s var(--ease) backwards}
+@keyframes pop{from{transform:scale(0) rotate(-50deg);opacity:0}}
+.newbest{display:inline-block;margin-top:8px;padding:5px 11px;border-radius:99px;background:var(--grad-gold);color:#fff;font:700 .74rem/1 var(--sans);letter-spacing:.04em}
+.res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:22px 0}
+.rg{padding:13px 10px;border-radius:16px;background:var(--a-soft);text-align:center}
+.rg b{display:block;font:600 1.3rem/1.2 var(--serif);font-variant-numeric:tabular-nums}
+.rg span{font-size:.76rem;color:var(--muted)}
+.res-act{display:flex;gap:10px;flex-wrap:wrap}
+
+/* ---------- উত্তরমালা ও শব্দার্থ ---------- */
+.keybox{margin-top:22px;border-radius:24px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--sh-1);overflow:hidden;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.key-btn{display:flex;align-items:center;gap:12px;width:100%;padding:17px 20px;background:transparent;border:0;text-align:left;font-weight:600;transition:background .2s}
+.key-btn:hover{background:var(--a-soft)}
+.key-btn .ki{flex:0 0 34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--grad);color:#fff}
+.key-btn .ki svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.key-btn #seqLbl{flex:1}
+.chev{color:var(--muted);transition:transform .3s var(--ease)}
+.key-btn[aria-expanded="true"] .chev{transform:rotate(180deg)}
+.mean{display:grid;grid-template-rows:0fr;transition:grid-template-rows .5s var(--ease)}
+.mean.show{grid-template-rows:1fr}
+.mean-inner{overflow:hidden;min-height:0}
+.m{display:grid;grid-template-columns:34px 1fr;gap:3px 8px;padding:15px 20px;border-top:1px solid var(--line-2)}
+.m .n{font:700 .85rem/1.9 var(--sans);color:var(--a1)}
+.m .en{font:1.04rem/1.6 var(--text)}
+.m .bn{grid-column:2;color:var(--ok);font-size:.95rem}
+.vocab{padding:20px 20px 8px;border-top:1px solid var(--line-2);background:linear-gradient(180deg,var(--a-soft),transparent 80%)}
+.vhead{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+.vtitle{display:flex;align-items:center;gap:10px;min-width:0}
+.vt{display:flex;align-items:center;gap:10px;font:600 1rem/1 var(--sans);color:var(--a1)}
+.vt::before{content:"";width:4px;height:18px;border-radius:3px;background:linear-gradient(180deg,var(--a1),var(--gold))}
+.vcount{padding:6px 11px;border:1px solid var(--line);border-radius:99px;background:var(--surface);font:500 .76rem/1 var(--sans);color:var(--muted)}
+.vsw{display:flex;align-items:center;padding:0;background:transparent;border:0}
+.vsw .track{position:relative;width:44px;height:25px;border-radius:99px;background:var(--line);transition:background .3s var(--ease)}
+.vsw .track::after{content:"";position:absolute;top:3px;left:3px;width:19px;height:19px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.3);transition:transform .3s var(--ease)}
+.vsw[aria-checked="true"] .track{background:var(--a2)}
+.vsw[aria-checked="true"] .track::after{transform:translateX(19px)}
+.vwrap{display:grid;grid-template-rows:1fr;transition:grid-template-rows .45s var(--ease)}
+.vwrap>div{overflow:hidden;min-height:0}
+.vocab.off .vwrap{grid-template-rows:0fr}
+.vgrid{padding-bottom:12px;display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px}
+.vi{position:relative;display:flex;flex-direction:column;gap:3px;padding:13px 14px 13px 18px;overflow:hidden;background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--sh-1);
+  opacity:0;transform:translateY(10px);transition:opacity .5s var(--ease),transform .5s var(--ease),border-color .2s,box-shadow .2s}
+.vi::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(180deg,var(--a1),var(--gold))}
+.mean.show .vi{opacity:1;transform:none;transition-delay:calc(var(--n,0)*50ms + 150ms),calc(var(--n,0)*50ms + 150ms),0s,0s}
+.mean.show .vi:hover{transform:translateY(-2px);border-color:var(--a2);box-shadow:var(--sh-2);transition-delay:0s}
+.vw{font:600 1.06rem/1.3 var(--serif)}
+.vm{font-size:.9rem;line-height:1.45;color:var(--ok)}
+
+/* ---------- মোবাইল ---------- */
+@media (max-width:720px){
+  .hero{grid-template-columns:1fr}
+  .hero-deco{display:none}
+  .hero h1{margin-top:14px}
+}
+@media (max-width:620px){
+  .hud-in{flex-wrap:wrap;gap:10px;padding:11px 14px}
+  .segs{flex:1 1 100%}
+  .chips{width:100%;justify-content:space-between}
+  .chip{padding:7px 9px}
+}
+@media (max-width:520px){
+  .wrap{padding-left:12px;padding-right:12px}
+  .hud{margin:0 0 12px;padding:8px 0}
+  .bento{gap:8px}
+  .tile{padding:13px 12px 12px;border-radius:18px}
+  .tile b{font-size:1.7rem}
+  .t-ic{width:32px;height:32px;margin-bottom:9px}
+  .cta{padding:16px 16px 18px;gap:12px}
+  .cta-ic{flex-basis:46px;height:46px;border-radius:15px}
+  .cta-go{flex-basis:36px;height:36px}
+  .sheet{--ml:40px}
+  .sheet-hd{margin-right:14px;margin-left:calc(var(--ml) + 14px)}
+  .assembled{padding-left:calc(var(--ml) + 14px);padding-right:14px;font-size:1.04rem}
+  .holes{left:8px}
+  .stamp{right:12px;bottom:12px;font-size:.95rem}
+  .opt{padding:14px}
+  .res-top{gap:14px}
+  .ring{width:92px;height:92px;flex-basis:92px}
+  .ring b{font-size:1.4rem}
+  .res-act .btn{flex:1}
+  .m{padding:14px 14px}
+  .vocab{padding:18px 14px 6px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+}
+
+
+/* ---------- অ্যাকাউন্ট ---------- */
+.tb-r{display:flex;align-items:center;gap:8px}
+.icon-btn.acct{width:44px;height:44px;border-radius:50%;padding:0;overflow:hidden;cursor:pointer;display:grid;place-items:center;border:2px solid var(--a2);box-shadow:0 0 0 3px var(--a-soft),var(--sh-1)}
+.icon-btn.acct img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.icon-btn.acct .av{display:grid;place-items:center;width:100%;height:100%;font:800 1.05rem/1 inherit;color:var(--a1)}
+.icon-btn.acct.guest{color:var(--a1);border-color:var(--line)}
+.icon-btn.acct.guest svg{width:21px;height:21px}
+.acct-menu{position:fixed;z-index:125;width:max-content;min-width:230px;max-width:88vw;display:flex;flex-direction:column;gap:2px;padding:8px;border-radius:18px;border:1px solid var(--line);background:var(--surface-2);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 20px 56px -14px rgba(0,0,0,.5);animation:mnIn .18s ease both}
+@keyframes mnIn{from{opacity:0;transform:translateY(-6px) scale(.97)}to{opacity:1;transform:none}}
+.acct-menu .mh{display:flex;flex-direction:column;gap:3px;padding:10px 12px 12px;margin-bottom:4px;border-bottom:1px solid var(--line)}
+.acct-menu .mh b{font-size:1rem;color:var(--ink)}
+.acct-menu .em{font-size:.8rem;color:var(--muted);word-break:break-all}
+.acct-menu .st{font-size:.76rem;color:var(--a1);min-height:1em}
+.acct-menu .mi{display:flex;align-items:center;gap:12px;width:100%;padding:12px;border:0;border-radius:12px;background:none;color:var(--ink);font:600 .95rem/1.2 inherit;text-align:left;cursor:pointer}
+.acct-menu button.mi:hover{background:var(--a-soft)}
+.acct-menu .mi i{display:grid;place-items:center;width:22px;height:22px;color:var(--a1);flex:0 0 auto}
+.acct-menu .mi i svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.acct-menu .mi.g i svg{stroke:none}
+.acct-menu .mi.edit{gap:8px;padding:6px 8px}
+.acct-menu input{flex:1;min-width:0;width:120px;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 .95rem/1.2 inherit;outline:none}
+.acct-menu input:focus{border-color:var(--a2)}
+.gate{position:fixed;inset:0;z-index:124;display:grid;place-items:center;padding:20px;background:rgba(5,13,17,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.gt-card{width:100%;max-width:380px;padding:26px 22px 18px;border-radius:22px;background:var(--surface-2);border:1px solid var(--line);box-shadow:0 30px 80px -20px rgba(0,0,0,.55);text-align:center}
+.gt-card h3{margin:0 0 8px;font-size:1.25rem;color:var(--ink)}
+.gt-card p{margin:0 0 18px;color:var(--muted);font-size:.95rem;line-height:1.6}
+.gt-g{width:100%;display:flex;align-items:center;justify-content:center;gap:12px;padding:14px;border-radius:14px;border:1px solid rgba(0,0,0,.12);background:#fff;color:#1f2933;font:700 1rem/1 inherit;cursor:pointer;box-shadow:0 6px 18px -8px rgba(0,0,0,.4)}
+.gt-g[disabled]{opacity:.65;cursor:default}
+.gt-err{min-height:1.2em;margin:10px 0 2px;color:#d64545;font-size:.85rem}
+.gt-x{background:none;border:0;color:var(--muted);font:500 .88rem/1 inherit;padding:10px;cursor:pointer}
+
+.acct-menu .nm{display:flex;align-items:center;gap:10px;justify-content:space-between}
+.acct-menu .ed{background:none;border:0;padding:4px 2px;color:var(--a1);font:600 .8rem/1 inherit;cursor:pointer;white-space:nowrap}
+.acct-menu input{flex:1;min-width:0;width:130px;padding:9px 10px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:600 .95rem/1.2 inherit;outline:none}
+.acct-menu input:focus{border-color:var(--a2)}
+
+.gt-ta,.gt-in{width:100%;margin:0 0 10px;padding:12px 13px;border-radius:12px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 .95rem/1.5 inherit;outline:none;resize:vertical;text-align:left}
+.gt-ta:focus,.gt-in:focus{border-color:var(--a2)}
+.gt-send{width:100%;padding:14px;border-radius:12px;border:0;cursor:pointer;background:linear-gradient(135deg,var(--a1),var(--a2));color:#fff;font:700 .98rem/1 inherit}.gt-send[disabled]{opacity:.7;cursor:default}
+.gt-r{display:block;width:100%;background:none;border:0;color:var(--a1);font:600 .85rem/1 inherit;padding:8px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+</style>
+</head>
+<body data-view="home">
+<script>window.APP_CFG={gate:true};/* true: সাজানো শুরু করতে লগইন লাগবে; false: লগইন ছাড়াই চলবে */</script>
+<!-- ========== প্রিমিয়াম স্বাগতম ইন্ট্রো ==========
+     ব্যবহার: পুরো অংশ (style + div + script) পাতার <body>-র একদম শুরুতে বসাও। আর কিছু বদলাতে হবে না।
+     প্রথমবার নাম জিজ্ঞেস করবে; পরের বার থেকে নাম ধরে ~৩.৫ সেকেন্ডের সিনেমাটিক স্বাগতম। -->
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@300;500;700;800&display=swap" rel="stylesheet">
+<style>
+#wp{position:fixed;inset:0;z-index:99999;overflow:hidden;color:#eafffb;display:grid;place-items:center;text-align:center;padding:24px;
+  font-family:"Anek Bangla","Inter",system-ui,"Noto Sans Bengali","Hind Siliguri",sans-serif;background:#040b0e}
+#wp .half{pointer-events:none;position:absolute;left:0;right:0;height:50.2%;background:#040b0e;z-index:5;transition:transform .9s cubic-bezier(.76,0,.24,1)}
+#wp .half.t{top:0}#wp .half.b{bottom:0}
+#wp .half::after{content:"";position:absolute;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,#2dd4bf,transparent)}
+#wp .half.t::after{bottom:0}#wp .half.b::after{top:0}
+#wp.go .half.t{transform:translateY(-101%)}#wp.go .half.b{transform:translateY(101%)}
+#wp .aur,#wp .grid,#wp canvas{z-index:6;pointer-events:none;transition:opacity .5s ease}
+#wp.go .aur,#wp.go .grid,#wp.go canvas{opacity:0}
+#wp.go .stage{opacity:0;transform:scale(1.06);transition:opacity .5s ease,transform .9s ease}
+#wp canvas{position:absolute;inset:0;width:100%;height:100%}
+#wp .aur{position:absolute;inset:-20%;filter:blur(60px);opacity:.9;animation:wpAur 6s ease-in-out infinite alternate}
+#wp .aur i{position:absolute;border-radius:50%}
+#wp .aur i:nth-child(1){width:55vmax;height:55vmax;left:-10%;top:-15%;background:radial-gradient(circle,rgba(20,184,166,.45),transparent 65%)}
+#wp .aur i:nth-child(2){width:45vmax;height:45vmax;right:-10%;bottom:-10%;background:radial-gradient(circle,rgba(56,120,255,.35),transparent 65%)}
+#wp .aur i:nth-child(3){width:35vmax;height:35vmax;left:30%;top:35%;background:radial-gradient(circle,rgba(167,139,250,.25),transparent 65%)}
+#wp .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:46px 46px;
+  -webkit-mask-image:radial-gradient(circle at 50% 50%,#000 10%,transparent 70%);mask-image:radial-gradient(circle at 50% 50%,#000 10%,transparent 70%);animation:wpFade 1.2s ease both}
+#wp .stage{position:relative;z-index:7;width:100%;max-width:460px;display:flex;flex-direction:column;align-items:center}
+#wp .mono{position:relative;width:110px;height:110px;display:grid;place-items:center;margin-bottom:22px;animation:wpPop .9s cubic-bezier(.2,1.2,.3,1) .1s both}
+#wp .mono svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+#wp .mono circle{fill:none;stroke-width:2;stroke-linecap:round}
+#wp .mono .r1{stroke:rgba(255,255,255,.12)}
+#wp .mono .r2{stroke:url(#wpg);stroke-dasharray:289;stroke-dashoffset:289;animation:wpDraw 1.3s cubic-bezier(.65,0,.35,1) .25s forwards;filter:drop-shadow(0 0 6px #2dd4bf)}
+#wp .mono b{font:700 2.2rem/1 inherit;background:linear-gradient(135deg,#fff,#5eead4);-webkit-background-clip:text;background-clip:text;color:transparent;animation:wpFade .6s ease .9s both}
+#wp .cap{font:600 .72rem/1 inherit;letter-spacing:.08em;color:#5eead4;margin-bottom:14px;opacity:0;animation:wpRise .7s ease .8s forwards}
+#wp .cap span{display:inline-block;width:26px;height:1px;background:linear-gradient(90deg,transparent,#5eead4);vertical-align:middle;margin:0 12px}
+#wp .cap span:last-child{transform:scaleX(-1)}
+#wp h1{margin:0;display:flex;flex-wrap:wrap;justify-content:center;font:800 clamp(2.6rem,13vw,4.4rem)/1.15 inherit;letter-spacing:0}
+#wp h1 s{text-decoration:none;display:inline-block;opacity:0;transform:translateY(60%) rotateX(-70deg);filter:blur(10px);
+  background:linear-gradient(180deg,#fff 30%,#7df9e6);background-size:100% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:wpLetter .8s cubic-bezier(.2,.9,.25,1) calc(1s + var(--i)*.06s) forwards}
+#wp h1 .sp{width:.3em}
+#wp .sweep{position:absolute;inset:0;pointer-events:none;background:linear-gradient(100deg,transparent 40%,rgba(255,255,255,.35) 50%,transparent 60%);mix-blend-mode:overlay;transform:translateX(-120%);animation:wpSweep 1.1s ease 1.9s forwards}
+#wp .sub{margin:16px 0 0;font:500 1.02rem/1.6 inherit;color:rgba(234,255,251,.7);opacity:0;animation:wpRise .8s ease 1.7s forwards}
+#wp .line{margin-top:26px;width:150px;height:2px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden;opacity:0;animation:wpFade .4s ease 1.2s forwards}
+#wp .line::after{content:"";display:block;height:100%;transform:scaleX(0);transform-origin:left;background:linear-gradient(90deg,#14b8a6,#a78bfa);animation:wpBar 2.2s cubic-bezier(.4,0,.2,1) 1.2s forwards}
+#wp .chg{margin-top:22px;background:none;border:0;color:rgba(234,255,251,.45);font:500 .78rem/1 inherit;cursor:pointer;opacity:0;animation:wpFade .6s ease 2.2s forwards;text-decoration:underline;text-underline-offset:3px}
+#wp .form{width:100%;margin-top:20px;opacity:0;animation:wpRise .7s ease 1.1s forwards}
+#wp input{width:100%;box-sizing:border-box;padding:16px 18px;border-radius:16px;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.06);backdrop-filter:blur(10px);color:#fff;font:600 1.15rem/1.2 inherit;text-align:center;outline:none;transition:.25s}
+#wp input::placeholder{color:rgba(255,255,255,.4);font-weight:500}
+#wp input:focus{border-color:#2dd4bf;box-shadow:0 0 0 4px rgba(45,212,191,.2),0 0 30px rgba(45,212,191,.25)}
+#wp .btn{margin-top:12px;width:100%;padding:15px;border:0;border-radius:16px;cursor:pointer;color:#032421;font:700 1rem/1 inherit;letter-spacing:.04em;
+  background:linear-gradient(90deg,#14b8a6,#5eead4,#14b8a6);background-size:200% 100%;box-shadow:0 10px 30px -10px rgba(45,212,191,.7);animation:wpShine 3s linear infinite;transition:transform .2s}
+#wp .btn:active{transform:scale(.97)}
+@keyframes wpAur{to{transform:translate(4%,-3%) scale(1.12) rotate(8deg)}}
+@keyframes wpPop{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:none}}
+@keyframes wpDraw{to{stroke-dashoffset:0}}
+@keyframes wpFade{from{opacity:0}to{opacity:1}}
+@keyframes wpRise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+@keyframes wpLetter{to{opacity:1;transform:none;filter:none}}
+@keyframes wpSweep{to{transform:translateX(120%)}}
+@keyframes wpBar{to{transform:scaleX(1)}}
+@keyframes wpShine{to{background-position:-200% 0}}
+#wp .gbtn{width:100%;display:flex;align-items:center;justify-content:center;gap:12px;padding:15px 16px;border:0;border-radius:16px;cursor:pointer;background:#fff;color:#1f2933;font:700 1rem/1 inherit;box-shadow:0 10px 30px -12px rgba(0,0,0,.7);transition:transform .2s,opacity .2s}
+#wp .gbtn:active{transform:scale(.97)}#wp .gbtn[disabled]{opacity:.65;cursor:default}
+#wp .gbtn svg{flex:0 0 auto}
+#wp .note{margin:12px 0 0;font:500 .8rem/1.5 inherit;color:rgba(234,255,251,.5)}
+#wp .or{display:flex;align-items:center;gap:12px;margin:22px 0 4px;color:rgba(234,255,251,.4);font:500 .78rem/1 inherit}
+#wp .or i{flex:1;height:1px;background:rgba(255,255,255,.14)}
+#wp .err{min-height:1.2em;margin-top:12px;color:#ff9b9b;font:500 .82rem/1.5 inherit}
+#wp .ttl{font:700 1.5rem/1.3 inherit;color:#fff;opacity:0;animation:wpRise .8s ease .9s forwards}
+@media (prefers-reduced-motion:reduce){#wp *{animation-duration:.01s!important;animation-delay:0s!important;transition-duration:.01s!important}}
+</style>
+<div id="wp" role="dialog" aria-live="polite"></div>
+<script>
+(function(){
+  var KEY="visitor.name",el=document.getElementById("wp"),root=document.documentElement,raf=0,T=[];
+  function later(f,ms){T.push(setTimeout(f,ms))}
+  if(!el)return;root.style.overflow="hidden";
+  function get(){try{return localStorage.getItem(KEY)||""}catch(e){return""}}
+  function set(v){try{v?localStorage.setItem(KEY,v):localStorage.removeItem(KEY)}catch(e){}}
+  function esc(s){return s.replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+  function greet(){var h=new Date().getHours();return h<5?"শুভ রাত্রি":h<12?"শুভ সকাল":h<16?"শুভ দুপুর":h<18?"শুভ বিকেল":"শুভ সন্ধ্যা"}
+  function gr(n){try{return Array.from(new Intl.Segmenter("bn",{granularity:"grapheme"}).segment(n),function(x){return x.segment})}catch(e){return n.split(/(?=\s)|(?<=\s)/)}}
+  function letters(n){return gr(n).map(function(c,i){return c===" "?'<s class="sp" style="--i:'+i+'">&nbsp;</s>':'<s style="--i:'+i+'">'+esc(c)+'</s>'}).join("")}
+  var stars=function(c){ /* ভাসমান কণা + সংযোগ-রেখা */
+    var x=c.getContext("2d"),W,H,P=[],D=Math.min(window.devicePixelRatio||1,2),N=46;
+    function size(){W=c.width=innerWidth*D;H=c.height=innerHeight*D}size();
+    for(var i=0;i<N;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.35*D,vy:(Math.random()-.5)*.35*D,r:(Math.random()*1.6+.6)*D});
+    (function f(){x.clearRect(0,0,W,H);
+      for(var i=0;i<N;i++){var p=P[i];p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>W)p.vx*=-1;if(p.y<0||p.y>H)p.vy*=-1;
+        x.fillStyle="rgba(125,249,230,.8)";x.beginPath();x.arc(p.x,p.y,p.r,0,6.283);x.fill();
+        for(var j=i+1;j<N;j++){var q=P[j],dx=p.x-q.x,dy=p.y-q.y,d=Math.sqrt(dx*dx+dy*dy),m=130*D;
+          if(d<m){x.strokeStyle="rgba(94,234,212,"+(.22*(1-d/m))+")";x.lineWidth=D*.8;x.beginPath();x.moveTo(p.x,p.y);x.lineTo(q.x,q.y);x.stroke()}}}
+      raf=requestAnimationFrame(f)})();
+  };
+  function scene(inner){
+    cancelAnimationFrame(raf);T.forEach(clearTimeout);T=[];
+    el.className="";
+    el.innerHTML='<div class="aur"><i></i><i></i><i></i></div><div class="grid"></div><canvas></canvas><div class="half t"></div><div class="half b"></div><div class="stage">'+inner+'</div>';
+    stars(el.querySelector("canvas"));
+  }
+  function mono(n){return '<div class="mono"><svg viewBox="0 0 100 100"><defs><linearGradient id="wpg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5eead4"/><stop offset="1" stop-color="#a78bfa"/></linearGradient></defs><circle class="r1" cx="50" cy="50" r="46"/><circle class="r2" cx="50" cy="50" r="46"/></svg><b>'+esc(gr(n)[0]||"✦").toUpperCase()+'</b></div>'}
+  function close(){el.classList.add("go");setTimeout(function(){cancelAnimationFrame(raf);el.remove();root.style.overflow=""},1100)}
+  var cfg=window.APP_CFG=window.APP_CFG||{requireLogin:false};
+  var mode="",shownName="";
+  var G='<svg viewBox="0 0 48 48" width="22" height="22"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.2 5.5-4.7 7.2l7.6 5.9c4.4-4.1 6.9-10.1 6.9-17.6z"/><path fill="#FBBC05" d="M10.5 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.9-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>';
+  function alive(){return el.isConnected&&!el.classList.contains("go")}
+  function boot(){mode="boot";scene(mono("✦")+'<div class="cap" style="margin-top:4px"><span></span>স্বাগতম<span></span></div>');
+    later(function(){if(mode==="boot")guest()},4500)}
+  function guest(){var n=get();n?show(n):ask()}
+  function ask(){
+    if(!alive())return;mode="ask";
+    scene(mono("✦")+'<div class="cap"><span></span>স্বাগতম<span></span></div><div class="ttl">তোমার নামটা বলবে?</div><div class="form"><input maxlength="30" placeholder="তোমার নাম লেখো" autocomplete="given-name" aria-label="তোমার নাম"><button class="btn" type="button">প্রবেশ করো <svg viewBox="0 0 24 24" width="18" height="18" style="vertical-align:-3px"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>');
+    var i=el.querySelector("input"),b=el.querySelector(".btn");
+    var ok=function(){var v=i.value.trim();if(!v){i.focus();return}set(v);show(v)};
+    b.onclick=ok;i.onkeydown=function(e){if(e.key==="Enter")ok()};
+  }
+  function show(n){
+    if(!alive())return;mode="show";shownName=n;set(n);
+    scene(mono(n)+'<div class="cap"><span></span>'+greet()+'<span></span></div><h1>'+words2(n)+'<div class="sweep"></div></h1><div class="line"></div>');
+    var t=setTimeout(close,3600);T.push(t);
+  }
+  function words2(n){return gr(n).map(function(c,i){return c===" "?'<s class="sp" style="--i:'+i+'">&nbsp;</s>':'<s style="--i:'+i+'">'+esc(c)+'</s>'}).join("")}
+  window.WP={cfg:cfg,signIn:null,notMe:null,alive:alive,guest:guest,ask:ask,
+    show:function(n){if(!alive())return;if(mode==="show"&&shownName===n)return;show(n)}};
+  boot();
+})();
+</script>
+
+
+<div class="bgfx" aria-hidden="true"><i class="blob b1"></i><i class="blob b2"></i><i class="blob b3"></i></div>
+<div class="grain" aria-hidden="true"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14a89c"/><stop offset="1" stop-color="#d9a22b"/></linearGradient>
+</defs></svg>
+
+<div class="wrap">
+
+  <!-- ===== হোম ===== -->
+  <section class="view" id="home">
+    <header class="topbar">
+      <div class="brand"><span class="logo"><svg viewBox="0 0 24 24"><path d="M4 7h10M4 12h16M4 17h7"/><path d="M17 5l3 2-3 2"/></svg></span>Rearrange</div>
+      <div class="tb-r"><button class="icon-btn acct guest" id="acct" type="button" aria-label="প্রোফাইল" aria-haspopup="menu"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5c.9-4 3.8-6 7.5-6s6.6 2 7.5 6"/></svg></button></div>
+    </header>
+
+    <div class="hero">
+      <div class="hero-copy">
+        <span class="eyebrow"><i></i>বাক্য সাজাও অনুশীলন</span>
+        <h1>Rearrange <em>Practice</em></h1>
+        <p>এলোমেলো বাক্যগুলো সঠিক ক্রমে সাজিয়ে অনুচ্ছেদ গড়ো, শব্দার্থ শেখো, আর নিজের অগ্রগতি দেখো।</p>
+      </div>
+      <div class="hero-deco" aria-hidden="true">
+        <div class="dc d1"><b>১</b><span><i></i><i></i></span></div>
+        <div class="dc d2"><b>২</b><span><i></i><i></i></span></div>
+        <div class="dc d3"><b>৩</b><span><i></i><i></i></span></div>
+      </div>
+    </div>
+
+    <div class="bento">
+      <div class="tile"><span class="t-ic"><svg viewBox="0 0 24 24"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg></span><b id="stTotal">০</b><span class="l">মোট বিষয়</span></div>
+      <div class="tile g"><span class="t-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12.5l2.7 2.7L16 9.5"/></svg></span><b id="stDone">০</b><span class="l">সম্পন্ন</span></div>
+      <div class="tile i"><span class="t-ic"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg></span><b id="stAvg">—</b><span class="l">গড় নির্ভুলতা</span></div>
+    </div>
+
+    <button class="cta" id="cta" type="button">
+      <span class="cta-ic"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l11-6.5-11-6.5z"/></svg></span>
+      <span class="cta-t"><small id="ctaK"></small><b id="ctaT"></b></span>
+      <span class="cta-go"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      <span class="cta-bar"><i id="ovFill"></i></span>
+    </button>
+
+    <div class="toolbar">
+      <label class="search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input id="q" type="search" placeholder="বিষয় খোঁজো…" aria-label="বিষয় খোঁজো" autocomplete="off"></label>
+      <div class="pills" role="group" aria-label="ফিল্টার">
+        <button class="pill" type="button" data-f="all" aria-pressed="true">সব</button>
+        <button class="pill" type="button" data-f="todo" aria-pressed="false">বাকি<b class="pn" id="nTodo"></b></button>
+        <button class="pill" type="button" data-f="done" aria-pressed="false">সম্পন্ন<b class="pn" id="nDone"></b></button>
+        <button class="pill" type="button" data-f="doubt" aria-pressed="false">সন্দেহ<b class="pn" id="nDoubt"></b></button>
+      </div>
+    </div>
+    <ol class="grid" id="list"></ol>
+    <div class="foot"><button class="linkbtn" id="resetBtn" type="button">অগ্রগতি মুছে ফেলো</button></div>
+  </section>
+
+  <!-- ===== অনুশীলন ===== -->
+  <section class="view" id="practice" hidden>
+    <div class="ptop">
+      <button class="btn ghost sm" id="backBtn" type="button"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>সব বিষয়</button>
+      <span class="spacer"></span>
+      <button class="icon-btn" id="prevBtn" type="button" aria-label="আগের বিষয়"><svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button class="icon-btn" id="nextTopicBtn" type="button" aria-label="পরের বিষয়"><svg viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></svg></button>
+      <button class="icon-btn theme-btn" type="button" aria-label="থিম বদলাও"><svg class="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg><svg class="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg></button>
+    </div>
+    <div class="ptitle">
+      <div class="crow">
+        <p class="crumb" id="crumb"></p>
+        <button class="stchip s-todo" id="stBtn" type="button" aria-haspopup="menu" aria-expanded="false" aria-label="সম্পন্ন বা সন্দেহ চিহ্ন বদলাও"><span class="sti" id="stIcon"></span><span id="stLbl"></span><span class="chev" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></button>
+      </div>
+      <h2 id="ptitle"></h2>
+    </div>
+
+    <div class="hud"><div class="hud-in">
+      <div class="segs" id="segs" role="progressbar" aria-label="অগ্রগতি" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
+      <div class="chips">
+        <span class="chip ok"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><b id="stOk">০/০</b></span>
+        <span class="chip x"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg><b id="stBad">০</b></span>
+        <span class="chip s" id="streakChip" title="টানা সঠিক"><svg viewBox="0 0 24 24"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.2 2-4.2.2 1.2.8 2 1.8 2.4C10.2 8.2 10.5 5.5 12 3z"/></svg><b id="stStreak">০</b></span>
+        <span class="chip t"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 3h5"/></svg><b id="timer">০:০০</b></span>
+      </div>
+    </div></div>
+
+    <div class="coach" id="msg" role="status" aria-live="polite">
+      <span class="co-ic"><svg class="ci-n" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8L12 3z"/></svg><svg class="ci-g" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><svg class="ci-b" viewBox="0 0 24 24"><path d="M12 7v6M12 17h.01"/></svg></span>
+      <span id="msgTxt"></span>
+    </div>
+
+    <div class="stage">
+      <div class="side">
+        <div id="optsCard">
+          <div class="opts-hd"><span id="left"></span><span class="kbd-hint"><kbd>১</kbd>–<kbd>৯</kbd> চেপে বাছাই করো</span></div>
+          <div id="opts"></div>
+        </div>
+
+        <div id="result" class="result" aria-live="polite">
+          <div class="res-top">
+            <div class="ring"><svg viewBox="0 0 100 100"><circle class="tr" cx="50" cy="50" r="44"/><circle class="fg" id="ringFg" cx="50" cy="50" r="44"/></svg><b id="acc">০%</b></div>
+            <div class="res-t">
+              <h3 id="resTitle"></h3>
+              <div class="res-stars" id="resStars"></div>
+              <span class="newbest" id="newBest" hidden>নতুন সেরা ফলাফল</span>
+              <p id="resSub"></p>
+            </div>
+          </div>
+          <div class="res-grid">
+            <div class="rg"><b id="resTime">০:০০</b><span>সময়</span></div>
+            <div class="rg"><b id="resBad">০</b><span>ভুল চেষ্টা</span></div>
+            <div class="rg"><b id="resStreak">০</b><span>সেরা ধারা</span></div>
+          </div>
+          <div class="res-act">
+            <button class="btn primary" id="restartBtn" type="button"><svg viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5"/></svg>আবার চেষ্টা করো</button>
+            <button class="btn ghost" id="flagBtn2" type="button"><svg viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></svg><span id="flag2Lbl"></span></button>
+            <button class="btn ghost" id="nextBtn" type="button">পরের বিষয়<svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sheet" id="sheet">
+        <i class="tape"></i><i class="holes"></i>
+        <div class="sheet-hd"><span id="sheetHd"></span>
+          <div class="spk" id="spk" hidden>
+            <button class="btn ghost sm" id="speakBtn" type="button" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/><path class="w1" d="M16 9a4 4 0 0 1 0 6"/><path class="w2" d="M18.5 6.5a8 8 0 0 1 0 11"/></svg><b id="speakLbl">শোনো</b></button>
+            <label class="vpick" id="vpick" title="কণ্ঠ বদলাও" hidden><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.6"/><path d="M5 20c.8-3.6 3.6-5.4 7-5.4s6.2 1.8 7 5.4"/></svg><select id="vsel" aria-label="কণ্ঠ বদলাও"></select></label>
+          </div>
+        </div>
+        <div class="assembled" id="assembled"></div>
+        <div class="stamp" aria-hidden="true">সম্পূর্ণ</div>
+      </div>
+    </div>
+
+    <div class="keybox">
+      <button class="key-btn" id="seqBtn" type="button" aria-expanded="false"><span class="ki"><svg viewBox="0 0 24 24"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3V4z"/><path d="M5 17a3 3 0 0 1 3-3h11"/></svg></span><span id="seqLbl">উত্তরমালা দেখো</span><span class="chev" aria-hidden="true">▾</span></button>
+      <div class="mean" id="seqBox"><div class="mean-inner" id="seqInner"></div></div>
+    </div>
+  </section>
+</div>
+
+<script>
+const SETS = [
+  {
+    title: "William Somerset Maugham",
+    sentences: [
+      "William Somerset Maugham is one of the greatest short story writers of modern time.",
+      "He was born in 1874 in Paris.",
+      "He qualified as a doctor and this life had no charm for him.",
+      "Soon he gave up medicine for literature.",
+      "He made his first appearance in literature by writing Liza of Lambeth, his first novel.",
+      "It is a realistic study on the life of low neighborhood in London.",
+      "This brought for him a good name.",
+      "He wrote a few other novels as well.",
+      "Then he took to writing plays.",
+      "Some of his well-known plays are Mrs. Craddock, Lady Frederick etc."
+    ],
+    meanings: [
+      "উইলিয়াম সমারসেট মম আধুনিক কালের অন্যতম শ্রেষ্ঠ ছোটগল্পকার।",
+      "তিনি ১৮৭৪ সালে প্যারিসে জন্মগ্রহণ করেন।",
+      "তিনি ডাক্তারি পাস করেছিলেন, কিন্তু এই জীবন তাঁর কাছে আকর্ষণীয় মনে হয়নি।",
+      "শীঘ্রই তিনি চিকিৎসাশাস্ত্র ছেড়ে সাহিত্যে মনোনিবেশ করেন।",
+      "তাঁর প্রথম উপন্যাস 'লাইজা অব ল্যামবেথ' লিখে তিনি সাহিত্যজগতে প্রথম আত্মপ্রকাশ করেন।",
+      "এটি লন্ডনের নিম্নবর্গীয় পাড়ার জীবনের একটি বাস্তবধর্মী চিত্র।",
+      "এটি তাঁকে সুনাম এনে দেয়।",
+      "তিনি আরও কয়েকটি উপন্যাস লিখেছিলেন।",
+      "এরপর তিনি নাটক লেখায় মন দেন।",
+      "তাঁর বিখ্যাত নাটকগুলোর মধ্যে রয়েছে মিসেস ক্র্যাডক, লেডি ফ্রেডেরিক ইত্যাদি।"
+    ],
+    vocab: [["the greatest","শ্রেষ্ঠতম"],["qualified","যোগ্যতা অর্জন করল; ডাক্তারি পাস করল"],["charm for","(কারও কাছে) আকর্ষণ"],["gave up","ত্যাগ করল; ছেড়ে দিল"],["appearance","আবির্ভাব; আত্মপ্রকাশ"],["realistic","বাস্তববাদী"],["neighborhood","পাড়া; প্রতিবেশ"],["plays","নাটক"]]
+  },
+  {
+    title: "Shakespeare: Education and Career",
+    sentences: [
+      "William Shakespeare was born in 1564 at Stratford-on-Avon in England.",
+      "He received a sound basic education.",
+      "But he never attended any college.",
+      "Shakespeare was married at eighteen to a woman of twenty-one.",
+      "He had three children before he was twenty-one.",
+      "A few years later, he went to London.",
+      "There he became an actor and a playwright.",
+      "By this time he was thirty.",
+      "He had become prosperous before he reached the age of thirty-four.",
+      "During the next ten years he composed his greatest plays."
+    ],
+    meanings: [
+      "উইলিয়াম শেকসপিয়র ১৫৬৪ সালে ইংল্যান্ডের স্ট্র্যাটফোর্ড-অন-অ্যাভনে জন্মগ্রহণ করেন।",
+      "তিনি একটি ভালো মৌলিক শিক্ষা লাভ করেছিলেন।",
+      "কিন্তু তিনি কখনও কোনো কলেজে পড়েননি।",
+      "আঠারো বছর বয়সে শেকসপিয়রের বিয়ে হয় একুশ বছর বয়সী এক নারীর সঙ্গে।",
+      "একুশ বছর বয়স হওয়ার আগেই তাঁর তিনটি সন্তান হয়েছিল।",
+      "কয়েক বছর পর তিনি লন্ডনে যান।",
+      "সেখানে তিনি অভিনেতা ও নাট্যকার হন।",
+      "এই সময় তাঁর বয়স ত্রিশ।",
+      "চৌত্রিশ বছর বয়সে পৌঁছানোর আগেই তিনি সমৃদ্ধ হয়ে উঠেছিলেন।",
+      "পরবর্তী দশ বছরে তিনি তাঁর শ্রেষ্ঠ নাটকগুলো রচনা করেন।"
+    ],
+    vocab: [["sound basic","সুদৃঢ় মৌলিক"],["prosperous","সমৃদ্ধ; ধনী"],["composed","রচনা করল"],["plays","নাটক"]]
+  },
+  {
+    title: "Shakespeare: The Greatest Dramatist",
+    sentences: [
+      "William Shakespeare was one of the greatest poets and dramatists of the world.",
+      "He was born on 23 April, 1564 in the small village of Stratford-on-Avon.",
+      "Shakespeare was interested in the theatre and very soon became an actor.",
+      "By 1592 he established himself as a leading dramatist of the age.",
+      "Shakespeare composed both tragedies and comedies.",
+      "In 1594 he became a member of the newly formed Lord Chamberlain's Company.",
+      "He was ranked the greatest dramatist by 1598.",
+      "In the next two years he wrote two long poems entitled 'Venus and Adonis' and 'The Rape of Lucrece.'",
+      "He possessed property both in Stratford and in London.",
+      "He retired some time before 1613 and died in 1616 in Paris."
+    ],
+    meanings: [
+      "উইলিয়াম শেকসপিয়র ছিলেন বিশ্বের অন্যতম শ্রেষ্ঠ কবি ও নাট্যকার।",
+      "তিনি ১৫৬৪ সালের ২৩ এপ্রিল স্ট্র্যাটফোর্ড-অন-অ্যাভন নামের ছোট্ট গ্রামে জন্মগ্রহণ করেন।",
+      "শেকসপিয়র থিয়েটারে আগ্রহী ছিলেন এবং খুব শীঘ্রই অভিনেতা হন।",
+      "১৫৯২ সালের মধ্যে তিনি যুগের একজন অগ্রগণ্য নাট্যকার হিসেবে নিজেকে প্রতিষ্ঠিত করেন।",
+      "শেকসপিয়র ট্র্যাজেডি ও কমেডি দুই ধরনের নাটকই রচনা করেন।",
+      "১৫৯৪ সালে তিনি নবগঠিত লর্ড চেম্বারলেইনস কোম্পানির সদস্য হন।",
+      "১৫৯৮ সালের মধ্যে তিনি শ্রেষ্ঠ নাট্যকার হিসেবে স্বীকৃতি পান।",
+      "পরের দুই বছরে তিনি ‘ভেনাস অ্যান্ড অ্যাডোনিস’ ও ‘দ্য রেইপ অব লুক্রিস’ নামে দুটি দীর্ঘ কবিতা লেখেন।",
+      "স্ট্র্যাটফোর্ড ও লন্ডন উভয় জায়গায় তাঁর সম্পত্তি ছিল।",
+      "তিনি ১৬১৩ সালের কিছু আগে অবসর নেন এবং ১৬১৬ সালে প্যারিসে মারা যান।"
+    ],
+    vocab: [["dramatists","নাট্যকারগণ"],["leading","অগ্রগণ্য; অগ্রগামী"],["composed","রচনা করল"],["tragedies","ট্র্যাজেডি; বিয়োগান্তক নাটক"],["comedies","কমেডি; মিলনাত্মক নাটক"],["ranked","গণ্য হলো"],["entitled","শিরোনামযুক্ত; নামে অভিহিত"],["possessed","অধিকারী ছিল"],["property","সম্পত্তি"],["some time before","কিছুকাল আগে"]]
+  },
+  {
+    title: "Shakespeare: Family and Death",
+    sentences: [
+      "William Shakespeare was born on April 23, 1564 in the village of Stratford-on-Avon.",
+      "His father John Shakespeare was a farmer's son who came to Stratford about 1531.",
+      "His mother Mary Arden was also a daughter of a prosperous farmer.",
+      "Of Shakespeare's education little is known.",
+      "His real teachers were the men and women and the natural influences which surrounded him at Stratford.",
+      "When he was 14, his father lost his little property and fell into debt.",
+      "In 1582, Shakespeare married Anne Hathaway, the daughter of a peasant family.",
+      "She was eight years older than he.",
+      "He went to London in about 1587 and joined Burbage's company of actors.",
+      "He died on the anniversary of his birth, April 23, 1616."
+    ],
+    meanings: [
+      "উইলিয়াম শেকসপিয়র ১৫৬৪ সালের ২৩ এপ্রিল স্ট্র্যাটফোর্ড-অন-অ্যাভন গ্রামে জন্মগ্রহণ করেন।",
+      "তাঁর পিতা জন শেকসপিয়র ছিলেন এক কৃষকের ছেলে, যিনি প্রায় ১৫৩১ সালে স্ট্র্যাটফোর্ডে আসেন।",
+      "তাঁর মা মেরি আর্ডেনও ছিলেন এক সমৃদ্ধ কৃষকের কন্যা।",
+      "শেকসপিয়রের শিক্ষা সম্পর্কে খুব কমই জানা যায়।",
+      "স্ট্র্যাটফোর্ডে তাঁকে ঘিরে থাকা নারী-পুরুষ ও প্রাকৃতিক প্রভাবই ছিল তাঁর প্রকৃত শিক্ষক।",
+      "তাঁর বয়স যখন ১৪, তখন তাঁর পিতা সামান্য সম্পত্তি হারিয়ে ঋণে জড়িয়ে পড়েন।",
+      "১৫৮২ সালে শেকসপিয়র এক কৃষক পরিবারের মেয়ে অ্যান হ্যাথাওয়েকে বিয়ে করেন।",
+      "তিনি শেকসপিয়রের চেয়ে আট বছরের বড় ছিলেন।",
+      "তিনি প্রায় ১৫৮৭ সালে লন্ডনে যান এবং বারবেজের অভিনেতাদের দলে যোগ দেন।",
+      "তিনি তাঁর জন্মদিনেই, ১৬১৬ সালের ২৩ এপ্রিল মারা যান।"
+    ],
+    vocab: [["prosperous","ধনী; সমৃদ্ধ"],["little is known","খুব কমই জানা যায়"],["influences","প্রভাবসমূহ"],["surrounded","ঘিরে রেখেছিল"],["little property","সামান্য সম্পত্তি"],["fell into","পড়ল; জড়িয়ে পড়ল"],["debt","ঋণ"],["peasant","কৃষক; চাষি"],["anniversary","বার্ষিকী"]]
+  },
+  {
+    title: "Rabindranath Tagore",
+    sentences: [
+      "Rabindranath was born in the renowned Tagore family in March, 1861.",
+      "After the completion of his house education he was sent to school.",
+      "But he did not like institutional education.",
+      "So arrangements were made at house for his proper education.",
+      "Only at the age of eight he started composing poems.",
+      "He wrote his poetic novel 'Banaphul' at the age of fifteen.",
+      "When he was sixteen, his poems and essays were being published in journals.",
+      "At the age of seventeen he was sent to London to study law.",
+      "But he studied literature with Professor Henry Morley, only for a few months and then returned home.",
+      "In his thirteenth year, Rabindranath along with his father went to visit the Himalayas."
+    ],
+    meanings: [
+      "রবীন্দ্রনাথ ১৮৬১ সালের মার্চে বিখ্যাত ঠাকুর পরিবারে জন্মগ্রহণ করেন।",
+      "বাড়ির শিক্ষা শেষ হওয়ার পর তাঁকে স্কুলে পাঠানো হয়।",
+      "কিন্তু প্রাতিষ্ঠানিক শিক্ষা তাঁর ভালো লাগেনি।",
+      "তাই বাড়িতেই তাঁর যথাযথ শিক্ষার ব্যবস্থা করা হয়।",
+      "মাত্র আট বছর বয়সে তিনি কবিতা রচনা শুরু করেন।",
+      "পনেরো বছর বয়সে তিনি তাঁর কাব্যধর্মী উপন্যাস ‘বনফুল’ লেখেন।",
+      "ষোলো বছর বয়সে তাঁর কবিতা ও প্রবন্ধ পত্রিকায় প্রকাশিত হচ্ছিল।",
+      "সতেরো বছর বয়সে তাঁকে আইন পড়তে লন্ডনে পাঠানো হয়।",
+      "কিন্তু তিনি অধ্যাপক হেনরি মর্লির কাছে মাত্র কয়েক মাস সাহিত্য অধ্যয়ন করেন, তারপর দেশে ফিরে আসেন।",
+      "তেরোতম বছরে রবীন্দ্রনাথ তাঁর পিতার সঙ্গে হিমালয় দেখতে যান।"
+    ],
+    vocab: [["renowned","বিখ্যাত"],["completion","সমাপ্তি"],["institutional","প্রাতিষ্ঠানিক"],["arrangements","ব্যবস্থা"],["made at","(বাড়িতে) করা হলো"],["composing","রচনা করা"],["essays","প্রবন্ধ"],["journals","পত্রিকা"],["along with","সঙ্গে; সহ"]]
+  },
+  {
+    title: "Alfred Nobel",
+    sentences: [
+      "Dr. Alfred Nobel was born on 21st October, 1833 at Stockholm, Sweden.",
+      "He was an engineer and chemist.",
+      "His father Emanuel Nobel was an architect and researcher.",
+      "He had ammunition business at Leningrad.",
+      "In 1850 Alfred Nobel joined his father's company.",
+      "After some years Alfred Nobel invented Dynamite.",
+      "He earned a lot of money from his Dynamite business.",
+      "He undertook a plan to give an award for encouraging the creative work for setting up peace in the world.",
+      "This award was named after Alfred Nobel and it was called 'Nobel Prize'.",
+      "The Nobel Prize has been being given since 1901."
+    ],
+    meanings: [
+      "ড. আলফ্রেড নোবেল ১৮৩৩ সালের ২১ অক্টোবর সুইডেনের স্টকহোমে জন্মগ্রহণ করেন।",
+      "তিনি ছিলেন একজন প্রকৌশলী ও রসায়নবিদ।",
+      "তাঁর পিতা ইমানুয়েল নোবেল ছিলেন একজন স্থপতি ও গবেষক।",
+      "লেনিনগ্রাডে তাঁর গোলাবারুদের ব্যবসা ছিল।",
+      "১৮৫০ সালে আলফ্রেড নোবেল পিতার প্রতিষ্ঠানে যোগ দেন।",
+      "কয়েক বছর পর আলফ্রেড নোবেল ডিনামাইট আবিষ্কার করেন।",
+      "ডিনামাইটের ব্যবসা থেকে তিনি প্রচুর অর্থ উপার্জন করেন।",
+      "বিশ্বে শান্তি প্রতিষ্ঠার সৃজনশীল কাজকে উৎসাহিত করতে তিনি একটি পুরস্কার প্রদানের পরিকল্পনা গ্রহণ করেন।",
+      "এই পুরস্কারটির নাম আলফ্রেড নোবেলের নামে রাখা হয় এবং একে ‘নোবেল পুরস্কার’ বলা হয়।",
+      "১৯০১ সাল থেকে নোবেল পুরস্কার দেওয়া হচ্ছে।"
+    ],
+    vocab: [["chemist","রসায়নবিদ"],["architect","স্থপতি"],["researcher","গবেষক"],["ammunition","গোলাবারুদ"],["invented","আবিষ্কার করল"],["Dynamite","ডিনামাইট"],["undertook","উদ্যোগ গ্রহণ করল"],["plan","পরিকল্পনা"],["encouraging","উৎসাহদান"],["peace","শান্তি"]]
+  },
+  {
+    title: "Einstein and the Queen",
+    sentences: [
+      "Einstein, the great scientist, was very simple in his ways of life.",
+      "Once the queen of Belgium invited him to Brussels.",
+      "When he got down from the train at Brussels, he could not think that there were actually many gorgeously dressed officials to receive him at the station.",
+      "The officials also expected to see somebody who would appear to be rich and aristocratic before them.",
+      "They could never imagine that this shabby man would be Einstein himself.",
+      "So, they went back to the queen and informed her that he had not come by the train.",
+      "Einstein, however, walked the whole way with a suitcase in one hand and a violin in the other.",
+      "When he reached the destination, the queen said to him, “I sent a car for you, Dr. Einstein.”",
+      "“I did not think that anybody would send a car for me,” replied the great scientist, with a smile.",
+      "“But I can assure you, I have greatly enjoyed the walk.”"
+    ],
+    meanings: [
+      "মহান বিজ্ঞানী আইনস্টাইন তাঁর জীবনযাপনে খুবই সাদাসিধে ছিলেন।",
+      "একবার বেলজিয়ামের রানি তাঁকে ব্রাসেলসে আমন্ত্রণ জানান।",
+      "ব্রাসেলসে ট্রেন থেকে নেমে তিনি ভাবতেই পারেননি যে স্টেশনে তাঁকে অভ্যর্থনা জানাতে সত্যিই অনেক জমকালো পোশাকের কর্মকর্তা এসেছেন।",
+      "কর্মকর্তারাও আশা করেছিলেন এমন কাউকে দেখবেন, যাঁকে ধনী ও অভিজাত মনে হবে।",
+      "এই জীর্ণ পোশাকের লোকটিই যে স্বয়ং আইনস্টাইন, তা তাঁরা কল্পনাও করতে পারেননি।",
+      "তাই তাঁরা রানির কাছে ফিরে গিয়ে জানালেন যে তিনি ট্রেনে আসেননি।",
+      "আইনস্টাইন অবশ্য এক হাতে সুটকেস আর অন্য হাতে বেহালা নিয়ে পুরো পথ হেঁটেই গেলেন।",
+      "তিনি গন্তব্যে পৌঁছালে রানি তাঁকে বললেন, “আমি আপনার জন্য একটি গাড়ি পাঠিয়েছিলাম, ড. আইনস্টাইন।”",
+      "“আমি ভাবিনি কেউ আমার জন্য গাড়ি পাঠাবে,” হাসিমুখে বললেন মহান বিজ্ঞানী।",
+      "“তবে আমি আপনাকে নিশ্চিত করে বলতে পারি, হাঁটাটা আমি খুব উপভোগ করেছি।”"
+    ],
+    vocab: [["got down","নেমে এল"],["gorgeously","জমকালোভাবে"],["somebody","কেউ একজন"],["aristocratic","অভিজাত"],["shabby","জীর্ণ; মলিন"],["however","তবে; অবশ্য"],["destination","গন্তব্য"],["assure","নিশ্চিত করা; আশ্বস্ত করা"]]
+  },
+  {
+    title: "Taimur the Conqueror",
+    sentences: [
+      "Taimur was one of the greatest conquerors of the world.",
+      "Once he attacked the province of a powerful prince.",
+      "He entered the kingdom of the prince and captured a large village.",
+      "The village was situated far away from the capital.",
+      "The prince heard the news.",
+      "He came with a large army.",
+      "His soldiers surrounded the village on all sides and a terrible battle took place.",
+      "Taimur's soldiers were killed.",
+      "Taimur disguised himself as a poor traveller.",
+      "Thus he saved his life."
+    ],
+    meanings: [
+      "তৈমুর ছিলেন বিশ্বের অন্যতম শ্রেষ্ঠ বিজেতা।",
+      "একবার তিনি এক শক্তিশালী যুবরাজের রাজ্য আক্রমণ করেন।",
+      "তিনি যুবরাজের রাজ্যে ঢুকে একটি বড় গ্রাম দখল করেন।",
+      "গ্রামটি রাজধানী থেকে অনেক দূরে অবস্থিত ছিল।",
+      "যুবরাজ খবরটি শুনলেন।",
+      "তিনি এক বিশাল সেনাবাহিনী নিয়ে এলেন।",
+      "তাঁর সৈন্যরা গ্রামটিকে চারদিক থেকে ঘিরে ফেলল এবং ভয়ংকর যুদ্ধ হলো।",
+      "তৈমুরের সৈন্যরা নিহত হলো।",
+      "তৈমুর নিজেকে এক গরিব পথিকের ছদ্মবেশে সাজালেন।",
+      "এভাবে তিনি প্রাণ রক্ষা করলেন।"
+    ],
+    vocab: [["conquerors","বিজেতাগণ"],["province","প্রদেশ; রাজ্য"],["captured","দখল করল"],["far away","বহু দূরে"],["surrounded","ঘিরে ফেলল"],["took place","সংঘটিত হলো"],["disguised","ছদ্মবেশ ধারণ করল"]]
+  },
+  {
+    title: "Hatem Tai of Yemen",
+    sentences: [
+      "Long ago there lived a very kind and generous man in Yemen.",
+      "The name of that man was Hatem Tai.",
+      "He was not rich but very hospitable.",
+      "People praised him more than their king.",
+      "One day the king gave a dinner.",
+      "The guests praised the king.",
+      "So, the king felt happy and proud.",
+      "But the guests praised Hatem Tai also.",
+      "This made the king angry.",
+      "So, the king wanted to have him removed from the world."
+    ],
+    meanings: [
+      "অনেক আগে ইয়েমেনে একজন অত্যন্ত দয়ালু ও উদার মানুষ বাস করতেন।",
+      "সেই লোকটির নাম ছিল হাতেম তাই।",
+      "তিনি ধনী ছিলেন না, কিন্তু খুবই অতিথিপরায়ণ ছিলেন।",
+      "মানুষ তাঁদের রাজার চেয়েও তাঁর বেশি প্রশংসা করত।",
+      "একদিন রাজা একটি ভোজের আয়োজন করলেন।",
+      "অতিথিরা রাজার প্রশংসা করল।",
+      "তাই রাজা সুখী ও গর্বিত বোধ করলেন।",
+      "কিন্তু অতিথিরা হাতেম তাইয়েরও প্রশংসা করল।",
+      "এতে রাজা ক্রুদ্ধ হলেন।",
+      "তাই রাজা তাঁকে পৃথিবী থেকে সরিয়ে দিতে চাইলেন।"
+    ],
+    vocab: [["generous","উদার"],["hospitable","অতিথিপরায়ণ"],["praised","প্রশংসা করল"],["removed","সরিয়ে দেওয়া"]]
+  },
+  {
+    title: "Hatem Tai and King Nawfel",
+    sentences: [
+      "Many years ago there lived a nobleman in one part of Arabia.",
+      "He was Hatem Tai who used to give the poor freely out of his riches.",
+      "That is why, he was very much loved by all people of Arabia.",
+      "Nawfel, king of another part of Arabia became jealous of Hatem Tai.",
+      "He was also afraid of him for his power and wealth.",
+      "He feared that Hatem might one day take away his kingdom.",
+      "So he made up his mind to get rid of Hatem at any cost.",
+      "So he collected his men and marched against Hatem.",
+      "Hatem knew of this and hid himself in a dense forest.",
+      "King Nawfel could not get Hatem."
+    ],
+    meanings: [
+      "বহু বছর আগে আরবের এক অংশে একজন অভিজাত ব্যক্তি বাস করতেন।",
+      "তিনি ছিলেন হাতেম তাই, যিনি নিজের সম্পদ থেকে দরিদ্রদের অকাতরে দান করতেন।",
+      "সে কারণে আরবের সব মানুষ তাঁকে খুব ভালোবাসত।",
+      "আরবের অন্য অংশের রাজা নওফেল হাতেম তাইয়ের প্রতি ঈর্ষান্বিত হলেন।",
+      "তাঁর ক্ষমতা ও সম্পদের কারণে তিনি তাঁকে ভয়ও পেতেন।",
+      "তিনি আশঙ্কা করলেন, হাতেম হয়তো একদিন তাঁর রাজ্য কেড়ে নেবে।",
+      "তাই যেকোনো মূল্যে হাতেমকে সরিয়ে ফেলার সিদ্ধান্ত নিলেন।",
+      "তাই তিনি তাঁর লোকজন জড়ো করে হাতেমের বিরুদ্ধে অভিযান চালালেন।",
+      "হাতেম তা জানতে পেরে এক ঘন জঙ্গলে নিজেকে লুকিয়ে রাখলেন।",
+      "রাজা নওফেল হাতেমকে ধরতে পারলেন না।"
+    ],
+    vocab: [["freely","অকাতরে"],["out of","থেকে"],["take away","কেড়ে নেওয়া"],["made up","স্থির করল"],["get rid of","পরিত্রাণ পাওয়া; সরিয়ে ফেলা"],["any cost","যেকোনো মূল্যে"],["collected","জড়ো করল"],["marched","অভিযান চালাল"],["dense","ঘন"]]
+  },
+  {
+    title: "Napoleon Bonaparte",
+    sentences: [
+      "More than 170 years ago, there lived in France one of the greatest soldiers called Napoleon Bonaparte.",
+      "He was born in 1769.",
+      "When he was young, he joined the French Army as an ordinary soldier.",
+      "He rose to high position in the army by his good work and courage.",
+      "He fought several wars with the neighbouring countries and won victories over them.",
+      "He grew very powerful and soon became the greatest man in the country.",
+      "In 1804, he proclaimed himself to be the emperor.",
+      "France under him was very powerful.",
+      "He died in 1821.",
+      "Yet the Frenchmen remember him with due respect."
+    ],
+    meanings: [
+      "১৭০ বছরেরও আগে ফ্রান্সে নেপোলিয়ন বোনাপার্ট নামে একজন সর্বশ্রেষ্ঠ সৈনিক বাস করতেন।",
+      "তিনি ১৭৬৯ সালে জন্মগ্রহণ করেন।",
+      "তরুণ বয়সে তিনি একজন সাধারণ সৈনিক হিসেবে ফরাসি সেনাবাহিনীতে যোগ দেন।",
+      "ভালো কাজ ও সাহসের জোরে তিনি সেনাবাহিনীতে উচ্চ পদে উন্নীত হন।",
+      "তিনি প্রতিবেশী দেশগুলোর সঙ্গে কয়েকটি যুদ্ধ করেন এবং তাদের বিরুদ্ধে জয়লাভ করেন।",
+      "তিনি অত্যন্ত শক্তিশালী হয়ে ওঠেন এবং শীঘ্রই দেশের শ্রেষ্ঠ মানুষ হয়ে ওঠেন।",
+      "১৮০৪ সালে তিনি নিজেকে সম্রাট ঘোষণা করেন।",
+      "তাঁর অধীনে ফ্রান্স অত্যন্ত শক্তিশালী ছিল।",
+      "তিনি ১৮২১ সালে মারা যান।",
+      "তবু ফরাসিরা তাঁকে যথাযোগ্য শ্রদ্ধার সঙ্গে স্মরণ করে।"
+    ],
+    vocab: [["ordinary","সাধারণ"],["rose","উন্নীত হলো"],["courage","সাহস"],["several","কয়েকটি"],["over them","তাদের বিরুদ্ধে"],["proclaimed","ঘোষণা করল"]]
+  },
+  {
+    title: "Napoleon and the English Boy",
+    sentences: [
+      "Napoleon, the king of France, was a great hero.",
+      "He won many battles and conquered many countries of Europe.",
+      "One day, he saw an English boy.",
+      "The boy was making a small boat.",
+      "The king asked him why he was making such a small boat.",
+      "The boy said, \"I shall cross the sea by this boat.\"",
+      "\"I want to go to my country because I didn't see my mother for a long time.\"",
+      "The king was charmed by the words of the small boy.",
+      "He made all arrangements to send him to his country.",
+      "Then the boy was very happy to meet his mother going to his country."
+    ],
+    meanings: [
+      "ফ্রান্সের রাজা নেপোলিয়ন ছিলেন একজন মহান বীর।",
+      "তিনি বহু যুদ্ধে জয়ী হন এবং ইউরোপের বহু দেশ জয় করেন।",
+      "একদিন তিনি একটি ইংরেজ বালককে দেখলেন।",
+      "বালকটি একটি ছোট নৌকা বানাচ্ছিল।",
+      "রাজা তাকে জিজ্ঞেস করলেন, সে কেন এমন ছোট নৌকা বানাচ্ছে।",
+      "বালকটি বলল, “আমি এই নৌকায় সাগর পাড়ি দেব।”",
+      "“আমি আমার দেশে যেতে চাই, কারণ অনেক দিন আমি আমার মাকে দেখিনি।”",
+      "ছোট বালকটির কথায় রাজা মুগ্ধ হলেন।",
+      "তিনি তাকে তার দেশে পাঠানোর সব ব্যবস্থা করলেন।",
+      "তারপর বালকটি নিজের দেশে গিয়ে মায়ের সঙ্গে দেখা করতে পেরে খুবই খুশি হলো।"
+    ],
+    vocab: [["conquered","জয় করল"],["charmed by","(কারও দ্বারা) মুগ্ধ হলো"],["words","কথা"],["arrangements","ব্যবস্থা"]]
+  },
+  {
+    title: "Robert Bruce and the Spider",
+    sentences: [
+      "Robert Bruce was the king of Scotland.",
+      "He took part in the revolt against king Edward I of England for the independence of his country.",
+      "But his army was defeated again and again.",
+      "Being defeated for six times, he lost all hope and fled away to save his life.",
+      "One day he was lying in a cave in the forest.",
+      "He noticed a spider trying to reach the top of the steep wall of the cave.",
+      "It fell down again and again, but it did not give up its attempts.",
+      "At its seventh attempt it succeeded in reaching the top.",
+      "Bruce got back his hope at that incident, took courage and gathered his soldiers together.",
+      "He led an expedition against England, overthrew the English army and secured the independence of Scotland."
+    ],
+    meanings: [
+      "রবার্ট ব্রুস ছিলেন স্কটল্যান্ডের রাজা।",
+      "তিনি নিজের দেশের স্বাধীনতার জন্য ইংল্যান্ডের রাজা প্রথম এডওয়ার্ডের বিরুদ্ধে বিদ্রোহে অংশ নেন।",
+      "কিন্তু তাঁর সেনাবাহিনী বারবার পরাজিত হয়।",
+      "ছয়বার পরাজিত হয়ে তিনি সব আশা হারিয়ে প্রাণ বাঁচাতে পালিয়ে যান।",
+      "একদিন তিনি জঙ্গলের একটি গুহায় শুয়ে ছিলেন।",
+      "তিনি লক্ষ করলেন, একটি মাকড়সা গুহার খাড়া দেয়ালের চূড়ায় পৌঁছানোর চেষ্টা করছে।",
+      "সেটি বারবার পড়ে যাচ্ছিল, কিন্তু চেষ্টা ছাড়ছিল না।",
+      "সপ্তমবারের চেষ্টায় সেটি চূড়ায় পৌঁছাতে সফল হলো।",
+      "সেই ঘটনায় ব্রুস আবার আশা ফিরে পেলেন, সাহস সঞ্চয় করলেন এবং তাঁর সৈন্যদের একত্র করলেন।",
+      "তিনি ইংল্যান্ডের বিরুদ্ধে অভিযান চালালেন, ইংরেজ সেনাবাহিনীকে পরাজিত করলেন এবং স্কটল্যান্ডের স্বাধীনতা নিশ্চিত করলেন।"
+    ],
+    vocab: [["took part in","অংশ নিল"],["revolt","বিদ্রোহ"],["fled away","পালিয়ে গেল"],["steep","খাড়া"],["attempts","চেষ্টা"],["got back","ফিরে পেল"],["incident","ঘটনা"],["led","নেতৃত্ব দিল"],["expedition","অভিযান"],["overthrew","উৎখাত করল"],["secured","নিশ্চিত করল"]]
+  },
+  {
+    title: "Solomon's Wisdom",
+    sentences: [
+      "Once there was a Jews King named Solomon.",
+      "He was famous all over the world for his wealth and wisdom.",
+      "The queen of Sheba heard much about Solomon's court and wisdom.",
+      "She desired to test the king.",
+      "She brought with her two garlands of flowers—one natural and the other artificial.",
+      "She placed them before the king and asked to take the natural one.",
+      "The king got puzzled for a while.",
+      "While pondering he noticed some bees humming outside the window and asked the window to be opened.",
+      "The bees came in and settled on the natural one.",
+      "This is how the riddle was solved and the queen went away admiring the king's wisdom."
+    ],
+    meanings: [
+      "একবার সলোমন নামে একজন ইহুদি রাজা ছিলেন।",
+      "তিনি তাঁর সম্পদ ও প্রজ্ঞার জন্য সারা বিশ্বে বিখ্যাত ছিলেন।",
+      "শেবার রানি সলোমনের দরবার ও প্রজ্ঞার কথা অনেক শুনেছিলেন।",
+      "তিনি রাজাকে পরীক্ষা করতে চাইলেন।",
+      "তিনি সঙ্গে দুটি ফুলের মালা আনলেন—একটি আসল, অন্যটি নকল।",
+      "তিনি মালা দুটি রাজার সামনে রাখলেন এবং আসলটি বেছে নিতে বললেন।",
+      "রাজা কিছুক্ষণ ধাঁধায় পড়ে গেলেন।",
+      "ভাবতে ভাবতে তিনি জানালার বাইরে কয়েকটি মৌমাছিকে গুনগুন করতে দেখলেন এবং জানালা খুলে দিতে বললেন।",
+      "মৌমাছিগুলো ভেতরে এসে আসল মালাটিতে বসল।",
+      "এভাবেই ধাঁধার সমাধান হলো এবং রানি রাজার প্রজ্ঞার প্রশংসা করতে করতে চলে গেলেন।"
+    ],
+    vocab: [["wisdom","প্রজ্ঞা"],["desired","ইচ্ছা করল"],["garlands","ফুলের মালা"],["placed","রাখল"],["puzzled","ধাঁধায় পড়ল"],["pondering","ভাবতে ভাবতে"],["bees","মৌমাছি"],["humming","গুনগুন করা"],["settled on","বসে পড়ল"],["riddle","ধাঁধা"],["went away","চলে গেল"],["admiring","প্রশংসা করতে করতে"]]
+  },
+  {
+    title: "Solomon and the Queen of Sheba",
+    sentences: [
+      "Everyone has heard the name of Solomon, the king of the Jews, who was famous all over the world for his wealth and magnificence and specially for his wisdom.",
+      "The Queen of Sheba had heard much about the grandeur of Solomon's court and the worldwide reputation of his learning and wisdom.",
+      "Attracted by such reports, she came to test the king.",
+      "She brought with her two garlands of flowers: one natural and the other artificial.",
+      "She placed them before the king to take the natural one.",
+      "Solomon was puzzled for a time.",
+      "While pondering, he noticed some bees humming for honey in a withered rose.",
+      "He asked the windows to be opened.",
+      "The bees came in and settled on the natural flowers and thus solved the riddle of the Queen.",
+      "The Queen of Sheba was surprised and went away admiring the king's great wisdom."
+    ],
+    meanings: [
+      "ইহুদিদের রাজা সলোমনের নাম সবাই শুনেছে, যিনি তাঁর সম্পদ ও জাঁকজমকের জন্য এবং বিশেষ করে প্রজ্ঞার জন্য সারা বিশ্বে বিখ্যাত ছিলেন।",
+      "শেবার রানি সলোমনের দরবারের জাঁকজমক এবং তাঁর বিদ্যা ও প্রজ্ঞার বিশ্বজোড়া খ্যাতির কথা অনেক শুনেছিলেন।",
+      "এমন সব খবরে আকৃষ্ট হয়ে তিনি রাজাকে পরীক্ষা করতে এলেন।",
+      "তিনি সঙ্গে দুটি ফুলের মালা আনলেন: একটি আসল, অন্যটি নকল।",
+      "তিনি মালা দুটি রাজার সামনে রাখলেন, যাতে তিনি আসলটি বেছে নিতে পারেন।",
+      "সলোমন কিছুক্ষণ ধাঁধায় পড়ে গেলেন।",
+      "ভাবতে ভাবতে তিনি লক্ষ করলেন, কয়েকটি মৌমাছি একটি শুকনো গোলাপে মধুর খোঁজে গুনগুন করছে।",
+      "তিনি জানালাগুলো খুলে দিতে বললেন।",
+      "মৌমাছিগুলো ভেতরে এসে আসল ফুলগুলোর ওপর বসল, আর এভাবে রানির ধাঁধার সমাধান হলো।",
+      "শেবার রানি বিস্মিত হলেন এবং রাজার মহান প্রজ্ঞার প্রশংসা করতে করতে চলে গেলেন।"
+    ],
+    vocab: [["Jews","ইহুদি জাতি"],["magnificence","জাঁকজমক; ঐশ্বর্য"],["grandeur","মহিমা; আড়ম্বর"],["such","এমন"],["reports","খবর; বিবরণ"],["garlands","ফুলের মালা"],["placed","রাখল"],["puzzled","ধাঁধায় পড়ল"],["pondering","ভাবতে ভাবতে"],["humming","গুনগুন করা"],["honey","মধু"],["withered","শুকিয়ে যাওয়া"],["rose","গোলাপ"],["settled on","বসে পড়ল"],["riddle","ধাঁধা"],["surprised","বিস্মিত"],["went away","চলে গেল"],["admiring","প্রশংসা করতে করতে"]]
+  },
+  {
+    title: "Mother Teresa",
+    sentences: [
+      "You have heard the name of Mother Teresa.",
+      "She was one of those people who dedicated their lives to the service of mankind.",
+      "She was born in Yugoslavia in 1919.",
+      "When she was eighteen, she decided to be a nun and came to Calcutta.",
+      "There she became a teacher of a school in Calcutta.",
+      "She swore to dedicate her life for the cause of helpless and poor people.",
+      "Soon her activities for the service of the sufferers spread all over the world.",
+      "As a recognition to her service, she was awarded the Nobel Prize for peace in 1979.",
+      "She was also given 'Bharat Ratna Award' in the following year.",
+      "She was on her heels for her selfless service to mankind even at her old age."
+    ],
+    meanings: [
+      "তোমরা মাদার তেরেসার নাম শুনেছ।",
+      "তিনি সেই মানুষদের একজন, যাঁরা মানবজাতির সেবায় নিজেদের জীবন উৎসর্গ করেছেন।",
+      "তিনি ১৯১৯ সালে যুগোস্লাভিয়ায় জন্মগ্রহণ করেন।",
+      "আঠারো বছর বয়সে তিনি সন্ন্যাসিনী হওয়ার সিদ্ধান্ত নেন এবং কলকাতায় আসেন।",
+      "সেখানে তিনি কলকাতার একটি স্কুলের শিক্ষিকা হন।",
+      "তিনি অসহায় ও দরিদ্র মানুষের জন্য নিজের জীবন উৎসর্গ করার শপথ নেন।",
+      "অচিরেই দুঃখীদের সেবায় তাঁর কর্মকাণ্ড সারা বিশ্বে ছড়িয়ে পড়ে।",
+      "তাঁর সেবার স্বীকৃতিস্বরূপ ১৯৭৯ সালে তিনি শান্তিতে নোবেল পুরস্কার পান।",
+      "পরের বছর তাঁকে ‘ভারতরত্ন’ পুরস্কারও দেওয়া হয়।",
+      "বৃদ্ধ বয়সেও তিনি মানবজাতির নিঃস্বার্থ সেবায় সক্রিয় ছিলেন।"
+    ],
+    vocab: [["dedicated","উৎসর্গ করল"],["service","সেবা"],["mankind","মানবজাতি"],["nun","সন্ন্যাসিনী"],["swore","শপথ করল"],["cause of","উদ্দেশ্যে; স্বার্থে"],["helpless","অসহায়"],["activities","কর্মকাণ্ড"],["sufferers","দুঃখী মানুষ"],["spread","ছড়িয়ে পড়ল"],["recognition","স্বীকৃতি"],["on her heels for","সক্রিয় ছিল; কর্মব্যস্ত ছিল"],["selfless","নিঃস্বার্থ"]]
+  },
+  {
+    title: "Buddha and the Mustard Seeds",
+    sentences: [
+      "A poor woman once came to Buddha.",
+      "She asked him whether he could give her any medicine to restore her dead child to life.",
+      "The holy man was touched by the great sorrow of the woman.",
+      "He told her that there was only one medicine which could revive her son.",
+      "He told her to bring a handful of mustard seeds from a house where death had never entered.",
+      "The sorrowful mother went from door to door seeking the mustard seeds but at every door she met with sad replies.",
+      "One said, \"I have lost my husband.\"",
+      "Another said, \"Our youngest child died last year.\"",
+      "She returned with heavy heart to the great teacher and told him the result of her great search.",
+      "Then Buddha told her affectionately that she must not think much of her own grief since sorrow and death are common to all."
+    ],
+    meanings: [
+      "একবার এক দরিদ্র নারী বুদ্ধের কাছে এলেন।",
+      "তিনি তাঁকে জিজ্ঞেস করলেন, তাঁর মৃত সন্তানকে বাঁচিয়ে তোলার কোনো ওষুধ তিনি দিতে পারেন কি না।",
+      "পবিত্র মানুষটি নারীর গভীর দুঃখে ব্যথিত হলেন।",
+      "তিনি বললেন, এমন একটিই ওষুধ আছে, যা তাঁর ছেলেকে বাঁচিয়ে তুলতে পারে।",
+      "তিনি তাঁকে এমন এক বাড়ি থেকে এক মুঠো সরিষার বীজ আনতে বললেন, যেখানে কখনো মৃত্যু প্রবেশ করেনি।",
+      "শোকার্ত মা সরিষার বীজের খোঁজে দরজায় দরজায় ঘুরলেন, কিন্তু প্রতিটি দরজায় দুঃখজনক উত্তর পেলেন।",
+      "একজন বলল, “আমি আমার স্বামীকে হারিয়েছি।”",
+      "আরেকজন বলল, “গত বছর আমাদের সবচেয়ে ছোট সন্তানটি মারা গেছে।”",
+      "তিনি ভারী মনে মহান শিক্ষকের কাছে ফিরে এসে তাঁর বিরাট অনুসন্ধানের ফল জানালেন।",
+      "তখন বুদ্ধ স্নেহভরে তাঁকে বললেন, নিজের শোক নিয়ে বেশি ভাবা উচিত নয়, কারণ দুঃখ ও মৃত্যু সবার জন্যই সাধারণ।"
+    ],
+    vocab: [["whether","কি না"],["restore","ফিরিয়ে দেওয়া"],["touched by","ব্যথিত হলো"],["sorrow","দুঃখ"],["revive","বাঁচিয়ে তোলা"],["handful","এক মুঠো"],["mustard seeds","সরিষার বীজ"],["entered","প্রবেশ করেছিল"],["seeking","খোঁজ করে"],["youngest","সবচেয়ে ছোট"],["heavy heart","ভারী মন"],["search","অনুসন্ধান"],["affectionately","স্নেহভরে"],["grief","শোক"]]
+  },
+  {
+    title: "The Astrologer and the Princess",
+    sentences: [
+      "There lived a man in a certain country.",
+      "He could tell people's future.",
+      "One day he was invited by the king to tell about the future of his daughter.",
+      "The king laughed at the future-teller and cut jokes with him.",
+      "The king said, \"Judge correctly and say whether my daughter will live a hundred years.\"",
+      "The astrologer took note and replied, \"Your Majesty, the princess will live only fifty years.\"",
+      "The king was very angry.",
+      "He ordered for his execution.",
+      "He took the astrologer to be a liar.",
+      "Before the astrologer was taken away the king asked him, \"Well, astrologer, can you say when you will die?\""
+    ],
+    meanings: [
+      "কোনো এক দেশে একজন লোক বাস করতেন।",
+      "তিনি মানুষের ভবিষ্যৎ বলতে পারতেন।",
+      "একদিন রাজা তাঁকে নিজের মেয়ের ভবিষ্যৎ বলার জন্য আমন্ত্রণ জানালেন।",
+      "রাজা ভবিষ্যদ্বক্তাকে নিয়ে হাসাহাসি করলেন এবং তাঁর সঙ্গে ঠাট্টা করলেন।",
+      "রাজা বললেন, “ঠিকঠাক বিচার করে বলুন, আমার মেয়ে কি একশো বছর বাঁচবে?”",
+      "জ্যোতিষী বিষয়টি মনে নিয়ে উত্তর দিলেন, “মহারাজ, রাজকুমারী মাত্র পঞ্চাশ বছর বাঁচবেন।”",
+      "রাজা ভীষণ রেগে গেলেন।",
+      "তিনি তাঁর মৃত্যুদণ্ডের আদেশ দিলেন।",
+      "তিনি জ্যোতিষীকে মিথ্যাবাদী ভাবলেন।",
+      "জ্যোতিষীকে নিয়ে যাওয়ার আগে রাজা তাঁকে জিজ্ঞেস করলেন, “আচ্ছা জ্যোতিষী, আপনি কি বলতে পারেন আপনি কবে মারা যাবেন?”"
+    ],
+    vocab: [["certain","কোনো এক"],["cut jokes","ঠাট্টা করল"],["Judge","বিচার করুন"],["whether","কি না"],["astrologer","জ্যোতিষী"],["took note","মনে নিল; লক্ষ করল"],["Majesty","মহারাজ"],["execution","মৃত্যুদণ্ড কার্যকর"],["taken away","নিয়ে যাওয়া"]]
+  },
+  {
+    title: "The Astrologer and the King",
+    sentences: [
+      "Once there was a king who was fond of knowing his future from the astrologer.",
+      "A good astrologer visited the capital of the king.",
+      "The king wished to know his future from the astrologer and so, the king called him to the palace.",
+      "The astrologer told something very unpleasant.",
+      "At this the king got furious and condemned him to death.",
+      "The astrologer was taken to the place of execution and then the king asked, \"How long would you live?\"",
+      "He thought that the king would prove him a liar putting him to death.",
+      "Then he thought for a while for some way of escape.",
+      "With ready wit he said, \"The stars declare that I'll die only a week before your death! I shall wait to receive your majesty where you have been sending me.\"",
+      "At this the king turned pale and shouted, \"Drive this wretch away and let him not come again.\""
+    ],
+    meanings: [
+      "একবার এক রাজা ছিলেন, যিনি জ্যোতিষীর কাছ থেকে নিজের ভবিষ্যৎ জানতে ভালোবাসতেন।",
+      "একজন ভালো জ্যোতিষী রাজার রাজধানীতে এলেন।",
+      "রাজা জ্যোতিষীর কাছ থেকে নিজের ভবিষ্যৎ জানতে চাইলেন এবং তাই তাঁকে প্রাসাদে ডাকলেন।",
+      "জ্যোতিষী খুব অপ্রীতিকর কিছু বললেন।",
+      "তাতে রাজা ক্ষিপ্ত হয়ে তাঁকে মৃত্যুদণ্ড দিলেন।",
+      "জ্যোতিষীকে বধ্যভূমিতে নিয়ে যাওয়া হলো, তখন রাজা জিজ্ঞেস করলেন, “আপনি আর কত দিন বাঁচবেন?”",
+      "তিনি ভাবলেন, রাজা তাঁকে মেরে ফেলে মিথ্যাবাদী প্রমাণ করবেন।",
+      "তখন তিনি কিছুক্ষণ পালানোর কোনো উপায় ভাবলেন।",
+      "উপস্থিত বুদ্ধিতে তিনি বললেন, “তারাগুলো ঘোষণা করছে, আমি আপনার মৃত্যুর মাত্র এক সপ্তাহ আগে মারা যাব! আপনি আমাকে যেখানে পাঠাচ্ছেন, সেখানে আমি মহারাজকে স্বাগত জানানোর জন্য অপেক্ষা করব।”",
+      "এ কথা শুনে রাজা ফ্যাকাশে হয়ে গেলেন এবং চিৎকার করে বললেন, “এই হতভাগাকে তাড়িয়ে দাও, সে যেন আর কখনো না আসে।”"
+    ],
+    vocab: [["astrologer","জ্যোতিষী"],["and so","তাই"],["palace","প্রাসাদ"],["unpleasant","অপ্রীতিকর"],["furious","ক্ষিপ্ত"],["condemned","দণ্ডিত করল"],["execution","মৃত্যুদণ্ড কার্যকর"],["escape","পালানোর পথ"],["ready wit","উপস্থিত বুদ্ধি"],["declare","ঘোষণা করে"],["majesty","মহারাজ"],["turned pale","ফ্যাকাশে হয়ে গেল"],["shouted","চিৎকার করল"],["Drive","তাড়িয়ে দাও"],["wretch","হতভাগা"]]
+  }
+];
+
+/* ================= সাহায্যকারী ================= */
+const $=id=>document.getElementById(id);
+const bn=n=>String(n).replace(/\d/g,d=>"০১২৩৪৫৬৭৮৯"[d]);
+const fmt=s=>bn(Math.floor(s/60))+":"+bn(String(s%60).padStart(2,"0"));
+const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const PAL=[["#0a6c78","#14a89c","20,168,156"],["#3447c9","#6b83ff","91,115,245"],["#7a35e6","#b07dff","150,100,250"],["#c2410c","#ff8a4c","240,120,60"],["#b81d5c","#ff6fa3","235,80,140"],["#0f766e","#3dd9a0","40,200,150"],["#a16207","#f2c14e","225,170,50"]];
+const pal=i=>PAL[i%PAL.length];
+const GOOD=["সঠিক! এবার পরের বাক্যটা খোঁজো।","দারুণ! গল্পটা এগিয়ে চলছে।","ঠিক ধরেছ। এখন কোনটা আসবে?","চমৎকার! আগের বাক্যের সাথে মিলিয়ে ভাবো।"];
+const PH='<span class="ph">সঠিক বাক্যগুলো এখানে ক্রমানুসারে জমা হবে।</span>';
+
+/* নরম প্রবেশ অ্যানিমেশন (Web Animations API) */
+function rise(el,n=0,y=14){
+  if(RM||!el||!el.animate)return;
+  el.animate([{opacity:0,transform:"translateY("+y+"px)"},{opacity:1,transform:"none"}],{duration:520,delay:n*45,easing:"cubic-bezier(.22,1,.36,1)",fill:"backwards"});
+}
+
+/* ================= সংরক্ষণ ================= */
+const SKEY="rp.v2";
+const S=(()=>{try{return JSON.parse(localStorage.getItem(SKEY))||{}}catch(e){return{}}})();
+S.prog=S.prog||{};
+S.man=S.man||{};     /* নিজে হাতে দেওয়া সম্পন্ন চিহ্ন: true = সম্পন্ন, false = চিহ্ন সরানো */
+S.doubt=S.doubt||{}; /* সন্দেহ চিহ্ন: আবার ভুল হতে পারে */
+const save=()=>{try{localStorage.setItem(SKEY,JSON.stringify(S))}catch(e){}if(window.__onSave)window.__onSave();};
+function toggleTheme(){
+  const r=document.documentElement;
+  const t=r.getAttribute("data-theme")==="dark"?"light":"dark";
+  r.setAttribute("data-theme",t);S.theme=t;save();
+}
+
+/* ================= অবস্থা ================= */
+let cur,curIdx=0,order=[],next=0,ok=0,bad=0,streak=0,bestStreak=0,t0=0,tEnd=0,tick=null,runId=0;
+let vocabOn=true,pushed=false,filter="all",query="",ctaIdx=0,resetArm=0;
+
+function shuffle(a){const r=a.slice();for(let i=r.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[r[i],r[j]]=[r[j],r[i]];}return r;}
+function setMsg(t,c){
+  const m=$("msg");
+  $("msgTxt").textContent=t;
+  m.classList.remove("good","bad");void m.offsetWidth;
+  if(c)m.classList.add(c);
+}
+/* সম্পন্ন = খেলা শেষ করেছ, অথবা হাতে চিহ্ন দিয়েছ (হাতের চিহ্নই আগে গণ্য) */
+function isDone(t){const m=S.man[t];return m!==undefined?m:!!S.prog[t];}
+function isDoubt(t){return !!S.doubt[t];}
+function toggleDone(t){
+  if(isDone(t)){S.man[t]=false;}
+  else if(S.prog[t]){delete S.man[t];}
+  else{S.man[t]=true;}
+  save();
+}
+function toggleDoubt(t){if(S.doubt[t])delete S.doubt[t];else S.doubt[t]=1;save();}
+const IC_TICK='<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+const IC_FLAG='<svg viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></svg>';
+const IC_MORE='<svg viewBox="0 0 24 24"><circle cx="12" cy="5.5" r="1.9"/><circle cx="12" cy="12" r="1.9"/><circle cx="12" cy="18.5" r="1.9"/></svg>';
+function updateStatusUI(){
+  if(!cur)return;
+  const t=cur.title,d=isDone(t),f=isDoubt(t);
+  $("stBtn").className="stchip "+(f?"s-doubt":d?"s-done":"s-todo");
+  $("stIcon").innerHTML=f?IC_FLAG:d?IC_TICK:"";
+  $("stLbl").textContent=f?(d?"সম্পন্ন · সন্দেহ":"সন্দেহ"):d?"সম্পন্ন":"বাকি";
+  $("flag2Lbl").textContent=f?"সন্দেহ চিহ্ন সরাও":"সন্দেহ চিহ্ন দাও";
+  $("flagBtn2").classList.toggle("flagged",f);
+}
+
+/* ---- সম্পন্ন/সন্দেহ মেনু: কার্ডের ⋯ বোতাম আর অনুশীলন পাতার স্ট্যাটাস ট্যাগ একই মেনু খোলে ---- */
+let menuEl=null,menuFor="",menuAnchor=null,menuAlign="end",menuKey=false,menuAt=0;
+const isMenuOpen=()=>!!menuEl&&menuEl.classList.contains("open");
+function buildMenu(){
+  menuEl=document.createElement("div");
+  menuEl.className="menu";menuEl.id="menu";
+  menuEl.setAttribute("role","menu");menuEl.setAttribute("aria-label","সম্পন্ন ও সন্দেহ চিহ্ন");
+  document.body.appendChild(menuEl);
+  menuEl.addEventListener("click",e=>{
+    const b=e.target.closest(".mi");if(!b)return;
+    const t=menuFor,a=b.dataset.a;
+    closeMenu(false);
+    if(a==="done")toggleDone(t);else toggleDoubt(t);
+    statusChanged(t);
+  });
+  /* বাইরে চাপলে মেনু বন্ধ হয়; নিচের কার্ডটা ভুল করে খুলে যায় না (অন্য ⋯ বোতাম ছাড়া) */
+  let swallow=0;
+  document.addEventListener("pointerdown",e=>{
+    if(!isMenuOpen())return;
+    if(menuEl.contains(e.target)||(menuAnchor&&menuAnchor.contains(e.target)))return;
+    closeMenu(false);swallow=performance.now();
+  },true);
+  document.addEventListener("pointercancel",()=>{swallow=0;},true);
+  document.addEventListener("click",e=>{
+    if(!swallow)return;
+    const fresh=performance.now()-swallow<600;swallow=0;
+    if(fresh&&!e.target.closest(".more,#stBtn")){e.stopPropagation();e.preventDefault();}
+  },true);
+  document.addEventListener("keydown",e=>{
+    if(!isMenuOpen())return;
+    const items=[...menuEl.querySelectorAll(".mi")],i=items.indexOf(document.activeElement);
+    if(e.key==="Escape"){e.preventDefault();e.stopPropagation();closeMenu(true);}
+    else if(e.key==="ArrowDown"||e.key==="ArrowUp"){
+      e.preventDefault();
+      items[e.key==="ArrowDown"?(i+1)%items.length:(i<=0?items.length-1:i-1)].focus({preventScroll:true});
+    }
+    else if(e.key==="Tab")closeMenu(false);
+  },true);
+  addEventListener("scroll",()=>{if(performance.now()-menuAt>250)closeMenu(false);},{passive:true,capture:true});
+  addEventListener("resize",placeMenu);
+}
+function fillMenu(t){
+  const d=isDoubt(t),k=isDone(t);
+  menuEl.innerHTML=
+    '<div class="menu-hd"></div>'+
+    '<button class="mi'+(k?" on":"")+'" type="button" role="menuitem" data-a="done"><span class="mic">'+IC_TICK+'</span><span class="mtx"><span>'+(k?"সম্পন্ন চিহ্ন সরাও":"সম্পন্ন হিসেবে চিহ্নিত করো")+'</span><small>'+(k?"আবার ‘বাকি’ তালিকায় যাবে":"তালিকায় সবুজ টিক বসবে")+'</small></span></button>'+
+    '<button class="mi'+(d?" on":"")+'" type="button" role="menuitem" data-a="doubt"><span class="mic">'+IC_FLAG+'</span><span class="mtx"><span>'+(d?"সন্দেহ চিহ্ন সরাও":"সন্দেহ চিহ্ন দাও")+'</span><small>'+(d?"হলুদ পতাকা সরে যাবে":"আবার করলে ভুল হতে পারে")+'</small></span></button>';
+  menuEl.firstChild.textContent=t;
+}
+function placeMenu(){
+  if(!isMenuOpen()||!menuAnchor||!menuAnchor.isConnected)return;
+  const r=menuAnchor.getBoundingClientRect(),w=menuEl.offsetWidth,h=menuEl.offsetHeight;
+  const vw=document.documentElement.clientWidth,vh=innerHeight,pad=8,gap=6;
+  let left=menuAlign==="end"?r.right-w:r.left;
+  left=Math.max(pad,Math.min(left,vw-w-pad));
+  let top=r.bottom+gap,up=false;
+  if(top+h>vh-pad){
+    if(r.top-gap-h>=pad){top=r.top-gap-h;up=true;}
+    else top=Math.max(pad,vh-h-pad);
+  }
+  menuEl.style.left=left+"px";menuEl.style.top=top+"px";
+  menuEl.style.setProperty("--ox",Math.round(r.left+r.width/2-left)+"px");
+  menuEl.style.setProperty("--oy",up?"100%":"0%");
+}
+function openMenu(t,anchor,align,viaKey){
+  if(isMenuOpen()&&menuAnchor===anchor){closeMenu(true);return;}
+  closeMenu(false);
+  menuFor=t;menuAnchor=anchor;menuAlign=align||"end";menuKey=!!viaKey;menuAt=performance.now();
+  fillMenu(t);
+  anchor.setAttribute("aria-expanded","true");
+  menuEl.classList.add("open");
+  placeMenu();
+  if(viaKey)menuEl.querySelector(".mi").focus({preventScroll:true});
+}
+function closeMenu(refocus){
+  if(!menuEl||!menuAnchor)return;
+  menuAnchor.setAttribute("aria-expanded","false");
+  if(refocus&&menuKey&&menuAnchor.isConnected)menuAnchor.focus({preventScroll:true});
+  menuEl.classList.remove("open");
+  menuAnchor=null;
+}
+/* চিহ্ন বদলালে: কার্ড/ট্যাগ আপডেট করে ছোট একটা নড়াচড়া দেখায় */
+function statusChanged(t){
+  updateStatusUI();
+  const pulse=(el,k)=>{if(el&&el.animate&&!RM)el.animate([{transform:"scale("+(1-k)+")"},{transform:"scale("+(1+k/3)+")",offset:.55},{transform:"scale(1)"}],{duration:420,easing:"cubic-bezier(.22,1,.36,1)"});};
+  if($("home").hidden){pulse($("stBtn"),.06);return;}
+  buildHome(true);
+  const li=[...$("list").children].find(x=>x.dataset.t===t);
+  if(!li)return;
+  if(menuKey){const m=li.querySelector(".more");if(m)m.focus({preventScroll:true});}
+  pulse(li.querySelector(".card"),.035);
+}
+function starsHTML(n,total=3){let h="";for(let i=0;i<total;i++)h+='<span class="'+(i<n?"on":"")+'">★</span>';return h;}
+
+/* ================= হোম ================= */
+function buildHome(quiet){
+  closeMenu(false);
+  const FLAG='<svg viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></svg>';
+  const TICK='<svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
+  const done=SETS.filter(s=>isDone(s.title));
+  const doubtN=SETS.filter(s=>isDoubt(s.title)).length;
+  const accs=SETS.filter(s=>isDone(s.title)&&S.prog[s.title]).map(s=>S.prog[s.title].best);
+  $("stTotal").textContent=bn(SETS.length);
+  $("stDone").textContent=bn(done.length);
+  $("stAvg").textContent=accs.length?bn(Math.round(accs.reduce((a,b)=>a+b,0)/accs.length))+"%":"—";
+  $("ovFill").style.width=(done.length/SETS.length*100)+"%";
+  $("nTodo").textContent=bn(SETS.length-done.length);
+  $("nDone").textContent=bn(done.length);$("nDone").classList.toggle("has",done.length>0);
+  $("nDoubt").textContent=bn(doubtN);$("nDoubt").classList.toggle("has",doubtN>0);
+
+  /* পরের পরামর্শ: আগে বাকি, তারপর সন্দেহ চিহ্নিত, তারপর সবচেয়ে কম নির্ভুলতা */
+  let i=SETS.findIndex(s=>!isDone(s.title)),k;
+  if(!done.length)k="শুরু করো";
+  else if(i>=0)k="চালিয়ে যাও · "+bn(done.length)+"/"+bn(SETS.length)+" সম্পন্ন";
+  else{
+    const di=SETS.findIndex(s=>isDoubt(s.title));
+    if(di>=0){i=di;k="সব সম্পন্ন! সন্দেহের বিষয়টা আবার ঝালাও";}
+    else{
+      i=0;SETS.forEach((s,j)=>{const a=S.prog[s.title]?S.prog[s.title].best:0,c=S.prog[SETS[i].title]?S.prog[SETS[i].title].best:0;if(a<c)i=j;});
+      k="সব সম্পন্ন! দুর্বলটা আবার ঝালাও";
+    }
+  }
+  ctaIdx=i;$("ctaK").textContent=k;$("ctaT").textContent=SETS[i].title;
+
+  const ul=$("list");ul.innerHTML="";
+  const q=query.trim().toLowerCase();let shown=0;const rings=[];
+  SETS.forEach((s,idx)=>{
+    const t=s.title,p=S.prog[t],d=isDone(t),f=isDoubt(t);
+    if(filter==="done"&&!d)return;if(filter==="todo"&&d)return;if(filter==="doubt"&&!f)return;
+    if(q&&!t.toLowerCase().includes(q))return;
+    shown++;
+    const c=pal(idx);
+    const li=document.createElement("li");
+    const b=document.createElement("button");b.type="button";b.className="card"+(d?" done":"")+(f?" doubt":"");
+    b.style.cssText="--c1:"+c[0]+";--c2:"+c[1]+";--rgb:"+c[2];
+    b.innerHTML='<span class="badge"></span><span class="c-body"><b></b><span class="c-meta"><span class="cst"></span><span class="cst fl" hidden></span><span class="mt"></span><span class="stars"></span></span></span>'+
+      '<span class="mring"><svg viewBox="0 0 46 46"><circle class="tr" cx="23" cy="23" r="18"/><circle class="fg" cx="23" cy="23" r="18"/></svg><span></span></span>';
+    const badge=b.querySelector(".badge");
+    if(d)badge.innerHTML=TICK;else badge.textContent=bn(idx+1);
+    if(f){const fd=document.createElement("i");fd.className="fdot";fd.innerHTML=FLAG;badge.appendChild(fd);}
+    b.querySelector("b").textContent=t;
+    const st=b.querySelector(".cst");
+    if(d){st.className="cst ok";st.innerHTML=TICK+"সম্পন্ন";}else{st.className="cst todo";st.textContent="বাকি";}
+    const fl=b.querySelector(".cst.fl");
+    if(f){fl.hidden=false;fl.className="cst warn";fl.innerHTML=FLAG+"সন্দেহ";}
+    b.querySelector(".mt").textContent=bn(s.sentences.length)+"টি বাক্য"+(p?" · সেরা সময় "+fmt(p.time):"");
+    b.querySelector(".stars").innerHTML=starsHTML(p?p.stars:0);
+    const fg=b.querySelector(".fg"),lab=b.querySelector(".mring span");
+    fg.style.strokeDashoffset="113.1";
+    if(p){lab.textContent=bn(p.best);rings.push([fg,113.1*(1-p.best/100)]);}
+    else if(d){lab.textContent="✓";lab.className="okmark";rings.push([fg,0]);}
+    else{lab.textContent="›";lab.className="go";}
+    b.onclick=()=>openSet(idx);
+    li.appendChild(b);
+
+    li.dataset.t=t;
+    const mb=document.createElement("button");mb.type="button";mb.className="more";mb.innerHTML=IC_MORE;
+    mb.setAttribute("aria-haspopup","menu");mb.setAttribute("aria-expanded","false");
+    mb.setAttribute("aria-label","চিহ্ন দাও — "+t);mb.title="সম্পন্ন / সন্দেহ চিহ্ন";
+    mb.onclick=e=>{e.stopPropagation();openMenu(t,mb,"end",e.detail===0);};
+    li.appendChild(mb);
+    ul.appendChild(li);if(!quiet)rise(li,Math.min(shown,14),16);
+  });
+  if(!shown){const e=document.createElement("li");e.className="empty";e.textContent="কোনো বিষয় পাওয়া যায়নি।";ul.appendChild(e);}
+  const applyRings=()=>rings.forEach(r=>{r[0].style.strokeDashoffset=String(r[1]);});
+  if(quiet)applyRings();else requestAnimationFrame(()=>requestAnimationFrame(applyRings));
+}
+
+function showView(v){
+  closeMenu(false);
+  const h=$("home"),p=$("practice");
+  h.hidden=v!=="home";p.hidden=v!=="practice";
+  document.body.dataset.view=v;
+  window.scrollTo(0,0);
+  if(v==="home"){stopTimer();stopSpeech();}
+  rise(v==="home"?h:p,0,10);
+}
+function openSet(i){
+  if(window.__gate&&!window.__gate(()=>openSet(i)))return;
+  start(i);showView("practice");
+  if(!pushed){try{history.pushState({p:1},"");pushed=true;}catch(e){pushed=false;}}
+}
+function showHome(){buildHome();showView("home");}
+function goBack(){if(pushed){try{history.back();return;}catch(e){}}pushed=false;showHome();}
+function go(d){start((curIdx+d+SETS.length)%SETS.length);window.scrollTo({top:0,behavior:"smooth"});rise($("practice"),0,10);}
+
+/* ================= টাইমার ================= */
+function stopTimer(){if(tick){clearInterval(tick);tick=null;}}
+function startTimer(){stopTimer();tick=setInterval(()=>{$("timer").textContent=fmt(Math.round((Date.now()-t0)/1000));},500);}
+
+/* ================= খেলা ================= */
+function start(i){
+  runId++;stopTimer();stopSpeech();
+  document.querySelectorAll(".opt.fly").forEach(e=>e.remove());
+  cur=SETS[i];curIdx=i;next=0;ok=0;bad=0;streak=0;bestStreak=0;t0=0;tEnd=0;
+  const n=cur.sentences.length;
+  let idx=[...Array(n).keys()];
+  do{idx=shuffle(idx);}while(n>1&&idx.every((v,k)=>v===k));
+  order=idx;
+  const c=pal(i),st=$("practice").style;
+  st.setProperty("--c1",c[0]);st.setProperty("--c2",c[1]);st.setProperty("--rgb",c[2]);
+  $("crumb").textContent="বিষয় "+bn(i+1)+" / "+bn(SETS.length);
+  $("ptitle").textContent=cur.title;
+  $("segs").innerHTML=cur.sentences.map(()=>"<i></i>").join("");
+  $("timer").textContent=fmt(0);
+  $("optsCard").style.display="";
+  $("result").classList.remove("show");
+  $("sheet").classList.remove("complete");
+  $("sheetHd").textContent=cur.title;
+  $("assembled").innerHTML=PH;
+  $("spk").hidden=true;
+  $("ringFg").style.strokeDashoffset="276.46";
+  $("newBest").hidden=true;
+  buildKey();renderOpts();updateProgress();updateStatusUI();
+  setMsg("অনুচ্ছেদের প্রথম বাক্যটি বেছে নাও।");
+}
+function renderOpts(){
+  const box=$("opts");box.innerHTML="";
+  order.forEach((si,n)=>{
+    const d=document.createElement("button");
+    d.type="button";d.className="opt";d.dataset.i=si;
+    d.innerHTML='<span class="key"></span><span class="txt"></span>';
+    d.querySelector(".txt").textContent=cur.sentences[si];
+    d.onclick=()=>pick(d,si);
+    box.appendChild(d);rise(d,n,14);
+  });
+  relabel();
+}
+function visibleOpts(){return[...document.querySelectorAll("#opts .opt:not(.used)")];}
+function relabel(){visibleOpts().forEach((d,k)=>{d.querySelector(".key").textContent=bn((k+1)%10);});}
+
+function collapse(el){
+  el.style.height=el.offsetHeight+"px";
+  void el.offsetHeight;
+  el.classList.add("used");
+  el.disabled=true;el.tabIndex=-1;el.setAttribute("aria-hidden","true");
+  relabel();
+}
+/* সঠিক বাক্য নিচের কাগজে নেমে যায় (কাগজ পর্দার বাইরে থাকলে পর্দার নিচের কিনারা পর্যন্ত নামে) */
+function flyAndCollapse(el,a,span,cb){
+  const r=span.getClientRects()[0];
+  if(!RM&&el.animate&&r&&a.bottom>0&&a.top<innerHeight){
+    const c=el.cloneNode(true);
+    c.className="opt right fly";
+    c.style.left=a.left+"px";c.style.top=a.top+"px";c.style.width=a.width+"px";c.style.height=a.height+"px";
+    document.body.appendChild(c);
+    /* অপশনটা গুটিয়ে গেলে কাগজ ততটা ওপরে উঠে আসে, তাই গন্তব্য সেই অনুযায়ী ধরা হয় */
+    const ty=Math.min(Math.max(r.top-(a.height+10),12),innerHeight-70);
+    const dx=r.left-a.left,dy=ty-a.top;
+    c.animate([
+      {transform:"translate(0,0) scale(1)",opacity:1,offset:0},
+      {transform:"translate("+dx*.3+"px,"+(dy*.3-22)+"px) scale(.84)",opacity:1,offset:.35},
+      {transform:"translate("+dx+"px,"+dy+"px) scale(.34)",opacity:.1,offset:1}
+    ],{duration:640,easing:"cubic-bezier(.45,.05,.25,1)",fill:"forwards"}).onfinish=()=>{c.remove();cb();};
+    collapse(el);
+  }else{collapse(el);setTimeout(cb,320);}
+}
+function pick(el,si){
+  if(el.dataset.lock)return;
+  if(!t0){t0=Date.now();startTimer();}
+  const n=cur.sentences.length;
+  if(si===next){
+    el.dataset.lock="1";
+    const id=runId,a=el.getBoundingClientRect();
+    ok++;next++;streak++;bestStreak=Math.max(bestStreak,streak);
+    const last=next===n;
+    if(last){tEnd=Date.now();stopTimer();}
+    const span=addAssembled(si);
+    el.classList.add("right");
+    updateProgress();
+    flyAndCollapse(el,a,span,()=>{
+      if(id!==runId)return;
+      span.style.visibility="";span.classList.add("new");
+      if(last)finish();
+    });
+    if(!last){
+      let m;
+      if(streak>=3)m="টানা "+bn(streak)+"টি সঠিক! থেমো না।";
+      else if(ok===Math.ceil(n/2))m="অর্ধেক হয়ে গেছে, চালিয়ে যাও!";
+      else m=GOOD[Math.floor(Math.random()*GOOD.length)];
+      setMsg(m,"good");
+    }
+  }else{
+    bad++;streak=0;updateProgress();
+    el.classList.remove("wrong");void el.offsetWidth;el.classList.add("wrong");
+    setTimeout(()=>el.classList.remove("wrong"),600);
+    try{if(navigator.vibrate)navigator.vibrate(40);}catch(e){}
+    setMsg(next===0
+      ?"ভুল। অনুচ্ছেদ কোন বাক্য দিয়ে শুরু হবে? সাধারণত পরিচয় বা ভূমিকার বাক্য আগে আসে।"
+      :"ভুল। আগের বাক্যের অর্থের সাথে মিল রেখে ভাবো: কী ঘটলে তারপর কী হবে।","bad");
+  }
+}
+function addAssembled(si){
+  const a=$("assembled");
+  if(a.querySelector(".ph"))a.innerHTML="";
+  a.querySelectorAll(".s.new").forEach(x=>x.classList.remove("new"));
+  const s=document.createElement("span");s.className="s";s.style.visibility="hidden";
+  const no=document.createElement("span");no.className="no";no.textContent=bn(si+1);
+  s.appendChild(no);s.appendChild(document.createTextNode(cur.sentences[si]));
+  a.appendChild(s);a.appendChild(document.createTextNode(" "));
+  $("spk").hidden=false;
+  return s;
+}
+function updateProgress(){
+  const n=cur.sentences.length;
+  $("segs").querySelectorAll("i").forEach((e,k)=>e.classList.toggle("on",k<ok));
+  $("segs").setAttribute("aria-valuenow",Math.round(ok/n*100));
+  $("stOk").textContent=bn(ok)+"/"+bn(n);
+  $("stBad").textContent=bn(bad);
+  $("stStreak").textContent=bn(streak);
+  const sc=$("streakChip");sc.classList.remove("hot");
+  if(streak>=3){void sc.offsetWidth;sc.classList.add("hot");}
+  $("left").innerHTML="বাকি <b>"+bn(n-ok)+"</b>টি বাক্য";
+}
+
+function finish(){
+  const n=cur.sentences.length;
+  const sec=Math.max(1,Math.round((tEnd-t0)/1000));
+  const acc=Math.round(n/(n+bad)*100);
+  const stars=bad===0?3:(acc>=80?2:1);
+  $("timer").textContent=fmt(sec);
+  const old=S.prog[cur.title];
+  const isBest=!!old&&acc>old.best;
+  S.prog[cur.title]={best:Math.max(acc,old?old.best:0),stars:Math.max(stars,old?old.stars:0),time:old?Math.min(old.time,sec):sec,tries:(old?old.tries:0)+1};
+  delete S.man[cur.title];  /* খেলা শেষ করলে আগের 'চিহ্ন সরানো' বাতিল হয়ে সম্পন্ন গণ্য হয় */
+  save();updateStatusUI();
+  $("optsCard").style.display="none";
+  $("sheet").classList.add("complete");
+  $("acc").textContent=bn(acc)+"%";
+  $("resTime").textContent=fmt(sec);$("resBad").textContent=bn(bad);$("resStreak").textContent=bn(bestStreak);
+  $("resTitle").textContent=stars===3?"চমৎকার! নিখুঁত":stars===2?"খুব ভালো!":"ভালো চেষ্টা!";
+  $("resSub").textContent=stars===3?"একটিও ভুল ছাড়া সম্পূর্ণ করেছ।":stars===2?"অল্প কিছু ভুল, আরেকবার চেষ্টা করলে নিখুঁত হবে।":"উত্তরমালা দেখে আবার চেষ্টা করো, উন্নতি হবেই।";
+  $("newBest").hidden=!isBest;
+  const rs=$("resStars");rs.innerHTML=starsHTML(stars);
+  rs.querySelectorAll(".on").forEach((e,k)=>{e.style.animationDelay=(.35+k*.2)+"s";});
+  $("result").classList.add("show");
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{$("ringFg").style.strokeDashoffset=String(276.46*(1-acc/100));}));
+  setMsg(bad===0?"সম্পূর্ণ হয়েছে, একটিও ভুল ছাড়া। পুরো অনুচ্ছেদ কাগজে দেখো।":"সম্পূর্ণ হয়েছে। মোট ভুল চেষ্টা: "+bn(bad)+"টি। পুরো অনুচ্ছেদ কাগজে দেখো।","good");
+  setTimeout(()=>$("result").scrollIntoView({behavior:"smooth",block:"center"}),200);
+  confetti(stars===3?1:stars===2?.6:.35);
+}
+
+/* ================= পড়ে শোনানো ================= */
+const TTS="speechSynthesis" in window&&"SpeechSynthesisUtterance" in window;
+const SPK={on:false,id:0,t:0,au:null};
+
+/* ---- ১) ফোন/ব্রাউজারের নিজস্ব কণ্ঠ থেকে সেরা ব্রিটিশ নারীকণ্ঠ বাছাই ---- */
+const V_NOVELTY=/^(albert|bad news|bahh|bells|boing|bubbles|cellos|good news|jester|organ|superstar|trinoids|whisper|wobble|zarvox)\b/i;
+const V_FEM=/\b(hazel|susan|libby|sonia|maisie|kate|serena|martha|stephanie|fiona|moira|flo|shelley|sandy|karen|tessa|samantha|victoria|zira|jenny|aria|emma|zoe|joanna|salli|ava|allison|nicky|catherine|linda|heather|veena|amy|olivia)\b/;
+const V_MAL=/\b(daniel|george|ryan|thomas|oliver|arthur|alfie|rishi|james|gordon|fred|alex|tom|mark|david|guy|eric|roger|bruce|aaron|evan|nathan|reed|rocko|eddy|ralph)\b/;
+const V_AND_F=["gba","gbc","fis"],V_AND_M=["gbb","gbd","rjs"];
+const vId=v=>((v.name||"")+" "+(v.voiceURI||"")).toLowerCase();
+const vLang=v=>(v.lang||"").replace("_","-").toLowerCase();
+const vKey=v=>v.voiceURI||v.name;
+function vGender(v){            /* 1 = নারী, -1 = পুরুষ, 0 = অজানা */
+  const id=vId(v);
+  if(/\bfemale\b|\bwoman\b/.test(id))return 1;
+  if(/\bmale\b|\bman\b/.test(id))return -1;
+  if(V_FEM.test(id))return 1;
+  if(V_MAL.test(id))return -1;
+  const m=/-x-([a-z]{3})/.exec(id);
+  if(m){if(V_AND_F.includes(m[1]))return 1;if(V_AND_M.includes(m[1]))return -1;}
+  return 0;
+}
+function vScore(v){
+  const l=vLang(v),id=vId(v);
+  if(!l.startsWith("en"))return -1e3;
+  let sc=l==="en-gb"?100:(/^en-(ie|au|nz|za|in|sc)|scotland/.test(l)?55:30);
+  sc+=[-70,0,60][vGender(v)+1];
+  if(/natural|neural|online|enhanced|premium|siri|wavenet|studio/.test(id))sc+=12;
+  if(/maisie/.test(id))sc-=15;
+  return sc;
+}
+function bestVoice(list){let b=null,bs=-1e9;list.forEach(v=>{const x=vScore(v);if(x>bs){bs=x;b=v;}});return b;}
+function enVoices(){
+  let l=[];try{l=speechSynthesis.getVoices()||[];}catch(e){}
+  return l.filter(v=>/^en([-_]|$)/i.test(v.lang||"")&&!V_NOVELTY.test(v.name||""));
+}
+const vShort=v=>((v.name||"").replace(/^Microsoft\s+/i,"").replace(/\s+-\s+English.*$/i,"").replace(/\s*\(English[^)]*\)+\s*$/i,"").trim())||v.name;
+
+/* ---- ২) অনলাইন ব্রিটিশ নারীকণ্ঠ (Emma/Amy): ফোনে ভালো কণ্ঠ না থাকলে বা ভিউয়ারে ভয়েস-সুবিধা না থাকলে ---- */
+const NET_URL={
+  se:(n,t)=>"https://api.streamelements.com/kappa/v2/speech?voice="+n+"&text="+encodeURIComponent(t),
+  gt:(n,t)=>"https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en-GB&q="+encodeURIComponent(t)
+};
+const NETBAD={};   /* এই সেশনে যে অনলাইন উৎস সাড়া দেয়নি, সেটা আর চেষ্টা হবে না */
+
+/* কোন কোন উপায়ে, কী ক্রমে চেষ্টা হবে */
+function enginePlan(){
+  const dv=TTS?enVoices():[],sel=S.voice||"",plan=[],b=bestVoice(dv);
+  if(S.gkey&&sel!=="dev"&&!sel.startsWith("net:"))plan.push({k:"gem"});
+  const net=(p,n)=>{if(!NETBAD[p+(n||"")])plan.push({k:"net",p,n});};
+  const dev=v=>{if(v)plan.push({k:"dev",v});};
+  if(sel.startsWith("net:")){net("se",sel.slice(4));net("gt");dev(b);}
+  else{
+    const m=sel?dv.find(v=>vKey(v)===sel):null;
+    if(m){dev(m);net("se","Emma");net("gt");}
+    else if(b&&vScore(b)>=160){dev(b);net("se","Emma");net("gt");}   /* ফোনেই নিশ্চিত ব্রিটিশ নারীকণ্ঠ আছে */
+    else{net("se","Emma");net("gt");dev(b);}
+  }
+  return plan;
+}
+function buildVoiceUI(){
+  const sel=$("vsel"),list=TTS?enVoices():[];
+  const gb=list.filter(v=>vLang(v)==="en-gb").sort((x,y)=>vScore(y)-vScore(x));
+  const ot=list.filter(v=>!gb.includes(v)).sort((x,y)=>vScore(y)-vScore(x));
+  const base=v=>{const g=vGender(v);return vShort(v)+(g>0?" ♀":g<0?" ♂":"");};
+  const cnt={};list.forEach(v=>{const t=base(v);cnt[t]=(cnt[t]||0)+1;});
+  const seen={};
+  const label=v=>{
+    const t=base(v);if(cnt[t]<2)return t;
+    const m=/-x-([a-z0-9]+)/i.exec(v.voiceURI||"");seen[t]=(seen[t]||0)+1;
+    return t+" · "+(m?m[1]:seen[t]);
+  };
+  const group=(title,arr)=>{
+    if(!arr.length)return;
+    const g=document.createElement("optgroup");g.label=title;
+    arr.forEach(v=>g.appendChild(new Option(label(v),vKey(v))));
+    sel.appendChild(g);
+  };
+  sel.innerHTML="";
+  const f=enginePlan()[0];
+  const auto=f?(f.k==="gem"?"Gemini":f.k==="dev"?vShort(f.v):(f.p==="se"?f.n+" (অনলাইন)":"Google (অনলাইন)")):"";
+  sel.appendChild(new Option("স্বয়ংক্রিয়"+(auto?" · "+auto:""),""));
+  sel.appendChild(new Option(S.gkey?"✨ Gemini · সবচেয়ে সুন্দর (key দেওয়া আছে)":"✨ Gemini · সবচেয়ে সুন্দর (key দিতে হবে)","gem"));
+  const net=document.createElement("optgroup");net.label="অনলাইন · ব্রিটিশ নারীকণ্ঠ (ইন্টারনেট লাগে)";
+  net.appendChild(new Option("Emma ♀","net:Emma"));net.appendChild(new Option("Amy ♀","net:Amy"));
+  sel.appendChild(net);
+  group("ফোনের কণ্ঠ · ব্রিটিশ",gb);group("ফোনের কণ্ঠ · অন্যান্য ইংরেজি",ot);
+  const ok=S.voice&&(S.voice==="gem"||S.voice.startsWith("net:")||list.some(v=>vKey(v)===S.voice));
+  sel.value=ok?S.voice:"";
+  $("vpick").hidden=false;$("spk").classList.add("has-pick");
+}
+
+/* ---- ৩) পড়া: একটা একটা বাক্য, পড়ার সময় ওই বাক্য কাগজে হাইলাইট ---- */
+function setSpeakUI(on,wait){$("speakBtn").setAttribute("aria-pressed",on);$("speakLbl").textContent=on?(wait?"অপেক্ষা…":"থামাও"):"শোনো";}
+function markSpeaking(i){
+  const sp=[...$("assembled").querySelectorAll(".s")];
+  sp.forEach((x,k)=>x.classList.toggle("speaking",k===i));
+  if(sp[i]&&sp[i].scrollIntoView&&!RM)sp[i].scrollIntoView({block:"nearest",behavior:"smooth"});
+}
+function gemDialog(){
+  let d=$("gemDlg");
+  if(!d){
+    d=document.createElement("div");d.id="gemDlg";d.className="gdlg";
+    d.innerHTML='<div class="gbox"><h3>Gemini কণ্ঠ চালু করো</h3><p>১) aistudio.google.com/apikey খুলে ফ্রি API key বানাও।<br>২) key-টা নিচে পেস্ট করো। এটা শুধু এই ফোনের ব্রাউজারে থাকবে।</p><input id="gemKey" type="password" placeholder="API key পেস্ট করো" autocomplete="off"><div class="gact"><button type="button" class="btn ghost sm" id="gemNo">বাতিল</button><button type="button" class="btn sm" id="gemOk">সংরক্ষণ</button></div></div>';
+    document.body.appendChild(d);
+    $("gemNo").onclick=()=>{d.classList.remove("show");buildVoiceUI();};
+    $("gemOk").onclick=()=>{const k=$("gemKey").value.trim();if(k){S.gkey=k;S.voice="gem";save();}d.classList.remove("show");buildVoiceUI();if(k&&cur&&next>0)speak(true,1);};
+  }
+  $("gemKey").value=S.gkey||"";d.classList.add("show");
+}
+function toast(msg){
+  let t=$("toast");
+  if(!t){t=document.createElement("div");t.id="toast";t.className="toast";t.setAttribute("role","status");t.setAttribute("aria-live","polite");document.body.appendChild(t);}
+  t.textContent=msg;void t.offsetWidth;t.classList.add("show");
+  clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove("show"),6500);
+}
+function stopSpeech(){
+  SPK.id++;SPK.on=false;clearTimeout(SPK.t);
+  try{if(TTS)speechSynthesis.cancel();}catch(e){}
+  (SPK.gt||[]).forEach(clearTimeout);SPK.gt=[];
+  try{if(SPK.src){SPK.src.onended=null;SPK.src.stop();}}catch(e){}SPK.src=null;
+  const au=SPK.au;
+  if(au){try{au.onplaying=au.onerror=au.onended=null;au.pause();au.removeAttribute("src");au.load();}catch(e){}}
+  markSpeaking(-1);setSpeakUI(false);
+}
+/* ফোনের কণ্ঠ: সব বাক্য একসাথে সারিতে দেয় */
+function playDev(e,texts,from,my,cb){
+  let started=false,dead=false,at=from;
+  const bad=()=>{if(dead||my!==SPK.id)return;dead=true;try{speechSynthesis.cancel();}catch(x){}cb.bad(at,!started);};
+  setTimeout(()=>{      /* cancel() এর ঠিক পরেই speak() দিলে কিছু ব্রাউজার আটকে যায়, তাই সামান্য দেরি */
+    if(my!==SPK.id||dead)return;
+    try{speechSynthesis.resume();}catch(x){}
+    for(let i=from;i<texts.length;i++){
+      const u=new SpeechSynthesisUtterance(texts[i]);
+      u.voice=e.v;u.lang=e.v.lang;u.rate=.9;u.pitch=1.04;u.volume=1;
+      u.onstart=()=>{if(my!==SPK.id||dead)return;started=true;at=i;cb.start(i);};
+      u.onend=()=>{if(my===SPK.id&&!dead&&i===texts.length-1){dead=true;cb.end();}};
+      u.onerror=ev=>{const k=ev&&ev.error;if(k==="canceled"||k==="interrupted")return;bad();};
+      speechSynthesis.speak(u);
+    }
+    SPK.t=setTimeout(()=>{if(!started)bad();},6000);
+  },60);
+}
+/* Gemini কণ্ঠ: সবচেয়ে সুন্দর। নিজের (ফ্রি) API key লাগে; পুরো অনুচ্ছেদ একবারে বানিয়ে বাক্য অনুযায়ী হাইলাইট করে */
+const GEM_MODELS=["gemini-2.5-flash-preview-tts","gemini-2.5-flash-tts"];
+const GEM_VOICE="Sulafat";
+const GEM_CACHE={};
+let GEM_CTX=null;
+function gemPCM(b64){
+  const bin=atob(b64),n=bin.length>>1,f=new Float32Array(n);
+  for(let i=0;i<n;i++){let v=bin.charCodeAt(2*i)|(bin.charCodeAt(2*i+1)<<8);if(v&32768)v-=65536;f[i]=v/32768;}
+  return f;
+}
+async function gemFetch(text,key){
+  const body={contents:[{parts:[{text:"Read this aloud in a warm, soft, melodious British English (Received Pronunciation) female voice, calm, friendly and natural, with gentle pauses between sentences:\n\n"+text}]}],
+    generationConfig:{responseModalities:["AUDIO"],speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:GEM_VOICE}}}}};
+  let err="";
+  for(const m of GEM_MODELS){
+    const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/"+m+":generateContent?key="+encodeURIComponent(key),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+    if(r.status===404){err="model";continue;}
+    if(!r.ok){const e=new Error("http");e.status=r.status;throw e;}
+    const j=await r.json(),d=j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts&&j.candidates[0].content.parts[0]&&j.candidates[0].content.parts[0].inlineData;
+    if(!d)throw new Error("empty");
+    return gemPCM(d.data);
+  }
+  throw new Error(err||"fail");
+}
+function playGem(e,texts,from,my,cb){
+  const AC=window.AudioContext||window.webkitAudioContext;
+  if(!AC){cb.bad(from,true);return;}
+  if(!GEM_CTX)GEM_CTX=new AC({sampleRate:24000});
+  try{GEM_CTX.resume();}catch(x){}
+  const part=texts.slice(from),text=part.join(" "),key=S.gkey;
+  (GEM_CACHE[text]?Promise.resolve(GEM_CACHE[text]):gemFetch(text,key).then(f=>GEM_CACHE[text]=f)).then(f=>{
+    if(my!==SPK.id)return;
+    const buf=GEM_CTX.createBuffer(1,f.length,24000);buf.copyToChannel(f,0);
+    const src=GEM_CTX.createBufferSource();src.buffer=buf;src.connect(GEM_CTX.destination);
+    SPK.src=src;SPK.gt=[];
+    const tot=part.reduce((a,t)=>a+t.length+8,0),dur=buf.duration*1000;let acc=0;
+    part.forEach((t,j)=>{SPK.gt.push(setTimeout(()=>{if(my===SPK.id)cb.start(from+j);},acc/tot*dur));acc+=t.length+8;});
+    src.onended=()=>{if(my===SPK.id)cb.end();};
+    src.start();
+  }).catch(er=>{
+    if(my!==SPK.id)return;
+    const s=er&&er.status;
+    toast(s===429?"Gemini-র ফ্রি সীমা পূর্ণ, একটু পরে আবার চেষ্টা করো। এবার সাধারণ কণ্ঠে চলছে।":(s===400||s===401||s===403)?"API key কাজ করছে না। কণ্ঠ-বোতামে 'Gemini' বেছে নতুন key দাও। এবার সাধারণ কণ্ঠে চলছে।":"Gemini কণ্ঠ আনা গেল না। এবার সাধারণ কণ্ঠে চলছে।");
+    cb.bad(from,false);
+  });
+}
+/* অনলাইন কণ্ঠ: একটাই <audio> দিয়ে বাক্যের পর বাক্য চালায় (ফোনের ভিউয়ারে এভাবেই নিরাপদ) */
+function playNet(e,texts,from,my,cb){
+  const au=SPK.au||(SPK.au=new Audio());
+  let i=from,any=false;
+  const step=()=>{
+    if(my!==SPK.id)return;
+    if(i>=texts.length){cb.end();return;}
+    const k=i;let started=false,dead=false;
+    const off=()=>{au.onplaying=au.onerror=au.onended=null;};
+    const bad=()=>{if(dead||my!==SPK.id)return;dead=true;clearTimeout(tm);off();try{au.pause();}catch(x){}cb.bad(k,!any);};
+    const tm=setTimeout(()=>{if(!started)bad();},7000);
+    au.onplaying=()=>{if(dead||my!==SPK.id)return;started=any=true;clearTimeout(tm);cb.start(k);};
+    au.onerror=bad;
+    au.onended=()=>{if(dead||my!==SPK.id)return;dead=true;clearTimeout(tm);off();i++;step();};
+    au.src=NET_URL[e.p](e.n,texts[k]);
+    const p=au.play();if(p&&p.catch)p.catch(bad);
+  };
+  step();
+}
+function speak(restart,limit){
+  if(SPK.on&&!restart){stopSpeech();return;}
+  stopSpeech();
+  const texts=cur.sentences.slice(0,limit?Math.min(limit,next):next);
+  if(!texts.length)return;
+  const my=SPK.id,plan=enginePlan();
+  SPK.on=true;setSpeakUI(true,true);
+  const run=(k,from)=>{
+    if(my!==SPK.id)return;
+    if(k>=plan.length){
+      stopSpeech();
+      toast("কণ্ঠ চালানো গেল না। ইন্টারনেট ঠিক আছে কি না দেখো, অথবা ফাইলটা Chrome ব্রাউজারে খুলে আবার চেষ্টা করো।");
+      return;
+    }
+    const e=plan[k];
+    const cb={
+      start:i=>{if(my!==SPK.id)return;setSpeakUI(true,false);markSpeaking(i);},
+      end:()=>{if(my!==SPK.id)return;SPK.on=false;markSpeaking(-1);setSpeakUI(false);},
+      bad:(i,none)=>{if(my!==SPK.id)return;if(e.k==="net"&&none)NETBAD[e.p+(e.n||"")]=1;run(k+1,i);}
+    };
+    (e.k==="dev"?playDev:e.k==="gem"?playGem:playNet)(e,texts,from,my,cb);
+  };
+  run(0,0);
+}
+
+/* ================= কনফেটি ================= */
+function confetti(power){
+  if(RM)return;
+  const c=$("fx"),x=c.getContext("2d"),d=Math.min(window.devicePixelRatio||1,2);
+  c.width=innerWidth*d;c.height=innerHeight*d;
+  const cols=["#14a89c","#f0c25a","#0a6c78","#6fe3d1","#ff8a4c","#6b83ff","#ff6fa3"];
+  const N=Math.round(120*power),P=[];
+  for(let k=0;k<N;k++){
+    const left=k%2===0,ang=(left?-62:-118)*Math.PI/180+(Math.random()-.5)*.7,sp=(11+Math.random()*10)*d;
+    P.push({x:(left?.1:.9)*c.width,y:c.height*.96,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,w:(6+Math.random()*7)*d,h:(4+Math.random()*5)*d,r:Math.random()*6.28,vr:(Math.random()-.5)*.35,c:cols[k%cols.length],round:Math.random()<.25});
+  }
+  const T=performance.now(),DUR=3200;
+  (function f(now){
+    const el=now-T;x.clearRect(0,0,c.width,c.height);
+    for(const p of P){
+      p.vy+=.42*d;p.vx*=.992;p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;
+      x.save();x.globalAlpha=Math.max(0,1-Math.pow(el/DUR,2));x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;
+      if(p.round){x.beginPath();x.arc(0,0,p.h/1.5,0,6.28);x.fill();}else x.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      x.restore();
+    }
+    if(el<DUR)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height);
+  })(T);
+}
+
+/* ================= উত্তরমালা ও শব্দার্থ ================= */
+function buildKey(){
+  const inner=$("seqInner");inner.innerHTML="";
+  if(cur.vocab&&cur.vocab.length){
+    const v=document.createElement("div");v.className="vocab";
+    const hd=document.createElement("div");hd.className="vhead";
+    const left=document.createElement("div");left.className="vtitle";
+    const t=document.createElement("span");t.className="vt";t.textContent="শব্দার্থ";
+    const c=document.createElement("span");c.className="vcount";c.textContent=bn(cur.vocab.length)+"টি শব্দ";
+    left.appendChild(t);left.appendChild(c);
+    const sw=document.createElement("button");sw.type="button";sw.className="vsw";
+    sw.setAttribute("role","switch");sw.setAttribute("aria-label","শব্দার্থ দেখাও/লুকাও");sw.innerHTML='<span class="track"></span>';
+    const setSw=on=>{vocabOn=on;sw.setAttribute("aria-checked",on);v.classList.toggle("off",!on);};
+    sw.onclick=()=>setSw(!vocabOn);
+    hd.appendChild(left);hd.appendChild(sw);v.appendChild(hd);setSw(vocabOn);
+    const wrap=document.createElement("div");wrap.className="vwrap";
+    const wi=document.createElement("div");wrap.appendChild(wi);
+    const g=document.createElement("div");g.className="vgrid";
+    cur.vocab.forEach((p,k)=>{
+      const it=document.createElement("div");it.className="vi";it.style.setProperty("--n",k);
+      const w=document.createElement("b");w.className="vw";w.textContent=p[0];
+      const m=document.createElement("span");m.className="vm";m.textContent=p[1];
+      it.appendChild(w);it.appendChild(m);g.appendChild(it);
+    });
+    wi.appendChild(g);v.appendChild(wrap);inner.appendChild(v);
+  }
+  cur.sentences.forEach((s,i)=>{
+    const d=document.createElement("div");d.className="m";
+    const n=document.createElement("div");n.className="n";n.textContent=bn(i+1)+".";
+    const en=document.createElement("div");en.className="en";en.textContent=s;
+    const b=document.createElement("div");b.className="bn";b.textContent=cur.meanings[i];
+    d.appendChild(n);d.appendChild(en);d.appendChild(b);inner.appendChild(d);
+  });
+  $("seqBox").classList.remove("show");
+  $("seqLbl").textContent="উত্তরমালা দেখো";
+  $("seqBtn").setAttribute("aria-expanded","false");
+}
+function toggleKey(){
+  const open=$("seqBox").classList.toggle("show");
+  $("seqLbl").textContent=open?"উত্তরমালা লুকাও":"উত্তরমালা দেখো";
+  $("seqBtn").setAttribute("aria-expanded",open);
+}
+
+/* ================= শুরু ================= */
+function init(){
+  buildMenu();
+  document.querySelectorAll(".theme-btn").forEach(b=>b.onclick=toggleTheme);
+  $("backBtn").onclick=goBack;
+  $("prevBtn").onclick=()=>go(-1);
+  $("nextTopicBtn").onclick=()=>go(1);
+  $("nextBtn").onclick=()=>go(1);
+  $("stBtn").onclick=e=>openMenu(cur.title,$("stBtn"),"end",e.detail===0);
+  $("flagBtn2").onclick=()=>{toggleDoubt(cur.title);statusChanged(cur.title);};
+  $("restartBtn").onclick=()=>{start(curIdx);window.scrollTo({top:0,behavior:"smooth"});};
+  $("speakBtn").onclick=()=>speak();
+  $("vsel").onchange=e=>{
+    if(e.target.value==="gem"){gemDialog();return;}
+    if(e.target.value)S.voice=e.target.value;else delete S.voice;
+    save();
+    if(cur&&next>0)speak(true,1);        /* নতুন কণ্ঠের নমুনা: প্রথম বাক্যটা শোনায় */
+  };
+  buildVoiceUI();
+  if(TTS){try{speechSynthesis.addEventListener("voiceschanged",buildVoiceUI);}catch(e){try{speechSynthesis.onvoiceschanged=buildVoiceUI;}catch(e2){}}}
+  $("seqBtn").onclick=toggleKey;
+  $("cta").onclick=()=>openSet(ctaIdx);
+  $("q").oninput=e=>{query=e.target.value;buildHome();};
+  document.querySelectorAll(".pill").forEach(p=>p.onclick=()=>{
+    filter=p.dataset.f;
+    document.querySelectorAll(".pill").forEach(x=>x.setAttribute("aria-pressed",x===p));
+    buildHome();
+  });
+  $("resetBtn").onclick=()=>{
+    const b=$("resetBtn");
+    if(!resetArm){resetArm=setTimeout(()=>{resetArm=0;b.textContent="অগ্রগতি মুছে ফেলো";},3500);b.textContent="নিশ্চিত? আবার চাপো";return;}
+    clearTimeout(resetArm);resetArm=0;S.prog={};S.man={};S.doubt={};save();b.textContent="অগ্রগতি মুছে ফেলো";buildHome();
+  };
+  window.addEventListener("popstate",()=>{pushed=false;showHome();});
+  const hud=document.querySelector(".hud");
+  addEventListener("scroll",()=>{hud.classList.toggle("stuck",!$("practice").hidden&&hud.getBoundingClientRect().top<=1&&scrollY>40);},{passive:true});
+  document.addEventListener("keydown",e=>{
+    if($("practice").hidden||e.ctrlKey||e.metaKey||e.altKey)return;
+    if(/^[0-9]$/.test(e.key)){
+      const list=visibleOpts(),k=(+e.key+9)%10;
+      if(list[k]){e.preventDefault();list[k].click();}
+    }
+  });
+  buildHome();showView("home");
+}
+init();
+
+</script>
+<script type="module">
+/* ===== Firebase: Google লগইন + অগ্রগতি সিঙ্ক ===== */
+const CFG={apiKey:"AIzaSyADnNJiOEeSXYwhnxjuZbb3YWBiqikrwjc",authDomain:"practice-78455.firebaseapp.com",projectId:"practice-78455",storageBucket:"practice-78455.firebasestorage.app",messagingSenderId:"1018618065622",appId:"1:1018618065622:web:e0697d76411b1791a44f77",measurementId:"G-J8QQGMYV2H"};
+const B="https://www.gstatic.com/firebasejs/10.14.1/";
+const META="rp.sync",WP=window.WP,q=id=>document.getElementById(id);
+const getMeta=()=>{try{return JSON.parse(localStorage.getItem(META))||{}}catch(e){return{}}};
+const setMeta=m=>{try{localStorage.setItem(META,JSON.stringify(m))}catch(e){}};
+let Au,Fs,auth,db,user=null,applying=false,timer=0,status="";
+
+const CN=u=>"rp.cname:"+u.uid;
+const effName=u=>{let c="";try{c=localStorage.getItem(CN(u))||""}catch(e){}return c||u.displayName||(u.email||"").split("@")[0]||"বন্ধু"};
+const guestName=()=>{try{return localStorage.getItem("visitor.name")||""}catch(e){return""}};
+function snap(){return JSON.parse(JSON.stringify({prog:S.prog||{},man:S.man||{},doubt:S.doubt||{}}))}
+function merge(r,l){            /* দুই জায়গার অগ্রগতি মেলানো: বেশি চেষ্টা করা ফলাফল থাকবে */
+  const prog={...(r.prog||{})};
+  Object.keys(l.prog||{}).forEach(k=>{const a=prog[k],b=l.prog[k];if(!a||(b.tries||0)>(a.tries||0))prog[k]=b;});
+  return {prog,man:{...(r.man||{}),...(l.man||{})},doubt:{...(r.doubt||{}),...(l.doubt||{})}};
+}
+function apply(d){
+  applying=true;
+  S.prog=d.prog||{};S.man=d.man||{};S.doubt=d.doubt||{};
+  try{save()}finally{applying=false}
+  try{buildHome(true)}catch(e){}
+}
+function setStatus(s){status=s;const e=q("acctSt");if(e)e.textContent=s==="ok"?"✓ Progress synced":s==="busy"?"Syncing…":s==="err"?"Sync failed. Check your connection":"";}
+async function push(){
+  if(!user)return true;
+  setStatus("busy");
+  try{
+    await Fs.setDoc(Fs.doc(db,"users",user.uid),{...snap(),name:user.displayName||"",cname:effName(user),updatedAt:Fs.serverTimestamp()});
+    setMeta({uid:user.uid,dirty:false});setStatus("ok");return true;
+  }catch(e){console.warn(e);setStatus("err");return false}
+}
+function schedule(){clearTimeout(timer);timer=setTimeout(push,1200)}
+window.__onSave=()=>{
+  if(applying||!user)return;
+  setMeta({uid:user.uid,dirty:true});schedule();
+};
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"&&user&&getMeta().dirty){clearTimeout(timer);push()}});
+
+async function syncIn(u){
+  setStatus("busy");
+  let rs;
+  try{rs=await Fs.getDoc(Fs.doc(db,"users",u.uid))}catch(e){console.warn(e);setStatus("err");return}
+  const meta=getMeta(),local=snap(),remote=rs.exists()?rs.data():null;
+  if(remote&&remote.cname&&remote.cname!==u.displayName){
+    let has="";try{has=localStorage.getItem(CN(u))||""}catch(e){}
+    if(!has){try{localStorage.setItem(CN(u),remote.cname)}catch(e){}renderAcct();if(WP.alive())WP.show(remote.cname)}
+  }
+  if(!remote){setMeta({uid:u.uid,dirty:true});await push();return}
+  if(meta.uid===u.uid){
+    if(meta.dirty){await push();return}      /* এই ডিভাইসে নতুন পরিবর্তন আছে, সেটাই ক্লাউডে যাবে */
+    apply(remote);setMeta({uid:u.uid,dirty:false});setStatus("ok");return;
+  }
+  const m=merge(remote,local);                /* প্রথমবার এই ডিভাইসে লগইন: ফোনের পুরোনো ডেটা + ক্লাউডের ডেটা মিলবে */
+  apply(m);setMeta({uid:u.uid,dirty:true});await push();
+}
+
+/* ===== অ্যাকাউন্ট বোতাম ও মেনু ===== */
+let menu=null;
+function closeMenu(){if(menu){menu.remove();menu=null}}
+const ICON={
+  user:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="3.8"/><path d="M4.5 20.5c.9-4 3.8-6 7.5-6s6.6 2 7.5 6"/></svg>',
+  edit:'<svg viewBox="0 0 24 24"><path d="M4 20h4L19 9a2.1 2.1 0 0 0-3-3L5 17v3z"/><path d="M14 7l3 3"/></svg>',
+  moon:'<svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>',
+  sun:'<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>',
+  flag:'<svg viewBox="0 0 24 24"><path d="M5 21V4"/><path d="M5 4h11l-2 4 2 4H5"/></svg>',
+  out:'<svg viewBox="0 0 24 24"><path d="M9 4H5v16h4"/><path d="M16 8l4 4-4 4M20 12H9"/></svg>',
+  g:'<svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.2 5.5-4.7 7.2l7.6 5.9c4.4-4.1 6.9-10.1 6.9-17.6z"/><path fill="#FBBC05" d="M10.5 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.9-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg>'
+};
+function renderAcct(){
+  const b=q("acct");if(!b)return;b.hidden=false;b.textContent="";
+  b.setAttribute("aria-label","Account");
+  if(user){
+    b.className="icon-btn acct";
+    if(user.photoURL){const im=new Image();im.alt="";im.referrerPolicy="no-referrer";im.src=user.photoURL;
+      im.onerror=()=>{im.remove();const s=document.createElement("span");s.className="av";s.textContent=Array.from(effName(user)||"?")[0].toUpperCase();b.appendChild(s)};
+      b.appendChild(im)}
+    else{const s=document.createElement("span");s.className="av";s.textContent=Array.from(effName(user)||"?")[0].toUpperCase();b.appendChild(s)}
+  }else{b.className="icon-btn acct guest";b.innerHTML=ICON.user}
+}
+function rename(v){
+  v=(v||"").trim().slice(0,30);if(!v)return false;
+  try{localStorage.setItem("visitor.name",v);if(user)localStorage.setItem(CN(user),v)}catch(e){}
+  if(user){setMeta({uid:user.uid,dirty:true});schedule()}
+  renderAcct();toast("Name updated");return true;
+}
+function openMenu(){
+  closeMenu();
+  const b=q("acct"),r=b.getBoundingClientRect();
+  menu=document.createElement("div");menu.className="acct-menu";menu.setAttribute("role","menu");
+  menu.style.top=(r.bottom+8)+"px";menu.style.right=Math.max(12,innerWidth-r.right)+"px";
+  const nm=user?effName(user):guestName();
+  const mk=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+  const row=(ic,label,fn)=>{const e=mk("button","mi");e.type="button";e.setAttribute("role","menuitem");e.innerHTML='<i>'+ic+'</i>';e.append(mk("span","",label));e.onclick=fn;return e};
+  /* মাথা: নাম ও ইমেইল */
+  const head=mk("div","mh");
+  head.append(mk("b","",nm||"Guest"));
+  if(user){head.append(mk("span","em",user.email||""));const st=mk("span","st");st.id="acctSt";head.append(st)}
+  else head.append(mk("span","em","Not signed in"));
+  menu.append(head);
+  /* ১. নাম বদলাও */
+  const nameRow=row(ICON.edit,nm?"Edit name":"Add name",()=>{
+    const box=mk("div","mi edit");const inp=mk("input");inp.maxLength=30;inp.value=nm;inp.placeholder="Your name";inp.setAttribute("aria-label","Name");
+    const ok=mk("button","btn sm","Save");ok.type="button";
+    const go=()=>{if(rename(inp.value))closeMenu();else inp.focus()};
+    ok.onclick=go;inp.onkeydown=e=>{if(e.key==="Enter")go()};box.append(inp,ok);
+    nameRow.replaceWith(box);inp.focus();inp.select();
+  });
+  menu.append(nameRow);
+  /* ২. থিম */
+  const dark=()=>document.documentElement.getAttribute("data-theme")==="dark";
+  const th=row(dark()?ICON.sun:ICON.moon,dark()?"Light mode":"Dark mode",()=>{
+    toggleTheme();th.querySelector("i").innerHTML=dark()?ICON.sun:ICON.moon;th.querySelector("span").textContent=dark()?"Light mode":"Dark mode";
+  });
+  menu.append(th);
+  /* ৩. লগইন / লগআউট */
+  if(user)menu.append(row(ICON.out,"Sign out",logout));
+  else{const li=row(ICON.g,"Sign in with Google",()=>{closeMenu();if(!WP.signIn){toast("লগইন সেবা এখনো প্রস্তুত নয়, ইন্টারনেট দেখো");return}WP.signIn().catch(e=>{if(e&&e.message)toast(e.message)})});li.classList.add("g");menu.append(li)}
+  menu.append(row(ICON.flag,"Report a problem",()=>{closeMenu();showReport()}));
+  document.body.appendChild(menu);setStatus(status);
+  setTimeout(()=>document.addEventListener("pointerdown",function f(e){if(menu&&!menu.contains(e.target)&&e.target!==b&&!b.contains(e.target)){closeMenu()}if(!menu)document.removeEventListener("pointerdown",f)}),0);
+}
+async function logout(){
+  if(getMeta().dirty){clearTimeout(timer);const ok=await push();if(!ok&&!confirm("অগ্রগতি এখনো সেভ হয়নি। তবুও লগআউট করবে?"))return}
+  try{await Au.signOut(auth)}catch(e){}
+  S.prog={};S.man={};S.doubt={};
+  try{localStorage.removeItem(META);localStorage.removeItem("visitor.name")}catch(e){}
+  applying=true;try{save()}finally{applying=false}
+  location.reload();
+}
+
+
+
+/* ===== সমস্যা জানানো (Report) ===== */
+let repEl=null,lastSent=0;
+function closeReport(){if(repEl){repEl.remove();repEl=null}}
+function diag(){
+  return {ua:(navigator.userAgent||"").slice(0,300),page:location.href.slice(0,200),
+    err:(window.__authErr||"")+"|fb:"+fbState+"|signed:"+(user?"yes":"no")+"|lang:"+(navigator.language||""),
+    uid:user?user.uid:"",name:(user?effName(user):guestName()).slice(0,60)};
+}
+function showReport(){
+  closeMenu();closeReport();
+  repEl=document.createElement("div");repEl.className="gate";repEl.style.zIndex=126;
+  repEl.innerHTML='<div class="gt-card" role="dialog" aria-modal="true"><h3>Report a problem</h3><p>Tell us what went wrong. Device details are attached automatically.</p><textarea class="gt-ta" maxlength="1000" rows="4" placeholder="Describe the problem" aria-label="Describe the problem"></textarea><input class="gt-in" maxlength="80" placeholder="Phone or email (optional)" aria-label="Contact"><button type="button" class="gt-send btn">Send report</button><div class="gt-err" role="alert"></div><button type="button" class="gt-x">Cancel</button></div>';
+  document.body.appendChild(repEl);
+  const ta=repEl.querySelector(".gt-ta"),ct=repEl.querySelector(".gt-in"),sb=repEl.querySelector(".gt-send"),er=repEl.querySelector(".gt-err");
+  ta.focus();
+  repEl.querySelector(".gt-x").onclick=closeReport;
+  repEl.onclick=e=>{if(e.target===repEl)closeReport()};
+  sb.onclick=async()=>{
+    const m=ta.value.trim();er.style.color="";
+    if(!m){er.textContent="Please describe the problem.";ta.focus();return}
+    if(Date.now()-lastSent<30000){er.textContent="Please wait a moment before sending another report.";return}
+    const d=diag(),data={message:m,contact:ct.value.trim().slice(0,80),uid:d.uid,name:d.name,ua:d.ua,page:d.page,err:d.err.slice(0,200),t:Fs?Fs.serverTimestamp():0};
+    if(!db||!Fs){
+      er.textContent="Couldn't connect to send this. Check your internet and try again.";return}
+    sb.disabled=true;sb.textContent="Sending…";
+    try{await Fs.addDoc(Fs.collection(db,"reports"),data);lastSent=Date.now();
+      repEl.querySelector(".gt-card").innerHTML='<h3>Thank you</h3><p>Your report was sent. We will look into it.</p><button type="button" class="gt-x">Close</button>';
+      repEl.querySelector(".gt-x").onclick=closeReport;
+    }catch(e){console.warn(e);sb.disabled=false;sb.textContent="Send report";er.textContent="Couldn't send. Check your internet and try again."}
+  };
+}
+window.__report=showReport;
+
+/* ===== লগইন গেট: সাজানো শুরু করতে গেলে লগইন চাইবে ===== */
+let gateEl=null,pendingFn=null,fbState="loading";
+function closeGate(){if(gateEl){gateEl.remove();gateEl=null}}
+function showGate(fn){
+  pendingFn=fn;closeGate();
+  gateEl=document.createElement("div");gateEl.className="gate";
+  gateEl.innerHTML='<div class="gt-card" role="dialog" aria-modal="true"><h3>চালিয়ে যেতে লগইন করো</h3><p>বাক্য সাজানোর অনুশীলন শুরু করতে Google দিয়ে লগইন করো।</p><button type="button" class="gt-g"><svg viewBox="0 0 48 48" width="22" height="22"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9.1 3.6l6.8-6.8C35.8 2.4 30.3 0 24 0 14.6 0 6.5 5.4 2.6 13.2l7.9 6.1C12.4 13.6 17.7 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v9h12.7c-.6 3-2.2 5.5-4.7 7.2l7.6 5.9c4.4-4.1 6.9-10.1 6.9-17.6z"/><path fill="#FBBC05" d="M10.5 28.7A14.5 14.5 0 0 1 9.5 24c0-1.6.3-3.2.8-4.7l-7.9-6.1A24 24 0 0 0 0 24c0 3.9.9 7.5 2.6 10.8l7.9-6.1z"/><path fill="#34A853" d="M24 48c6.5 0 11.9-2.1 15.9-5.8l-7.6-5.9c-2.1 1.4-4.9 2.3-8.3 2.3-6.3 0-11.6-4.1-13.5-9.8l-7.9 6.1C6.5 42.6 14.6 48 24 48z"/></svg><span>Google দিয়ে লগইন করো</span></button><div class="gt-err" role="alert"></div><button type="button" class="gt-r">Having trouble? Report a problem</button><button type="button" class="gt-x">এখন না</button></div>';
+  document.body.appendChild(gateEl);
+  const g=gateEl.querySelector(".gt-g"),er=gateEl.querySelector(".gt-err"),lb=g.querySelector("span");
+  g.onclick=()=>{er.textContent="";g.disabled=true;lb.textContent="অপেক্ষা করো…";
+    WP.signIn().catch(e=>{er.textContent=(e&&e.message)||""}).then(()=>{if(gateEl){g.disabled=false;lb.textContent="Google দিয়ে লগইন করো"}})};
+  gateEl.querySelector(".gt-r").onclick=()=>{pendingFn=null;closeGate();showReport()};
+  gateEl.querySelector(".gt-x").onclick=()=>{pendingFn=null;closeGate()};
+  gateEl.onclick=e=>{if(e.target===gateEl){pendingFn=null;closeGate()}};
+}
+window.__gate=fn=>{
+  if(!(window.APP_CFG&&window.APP_CFG.gate))return true;
+  if(user||fbState==="failed")return true;      /* লগইন সেবা একেবারেই লোড না হলে আটকাবে না */
+  if(fbState==="loading"){toast("একটু অপেক্ষা করো, লগইন সেবা চালু হচ্ছে…");return false}
+  showGate(fn);return false;
+};
+
+/* ===== চালু ===== */
+renderAcct();
+if(q("acct"))q("acct").onclick=()=>{menu?closeMenu():openMenu()};
+(async function(){
+  let App;
+  try{[App,Au,Fs]=await Promise.all([import(B+"firebase-app.js"),import(B+"firebase-auth.js"),import(B+"firebase-firestore.js")])}
+  catch(e){console.warn("Firebase লোড হয়নি",e);fbState="failed";WP.guest();return}
+  fbState="ready";
+  const app=App.initializeApp(CFG);auth=Au.getAuth(app);db=Fs.getFirestore(app);
+  try{import(B+"firebase-analytics.js").then(m=>m.isSupported().then(ok=>ok&&m.getAnalytics(app))).catch(()=>{})}catch(e){}
+  WP.signIn=async function(){
+    const p=new Au.GoogleAuthProvider();p.setCustomParameters({prompt:"select_account"});
+    try{await Au.signInWithPopup(auth,p)}
+    catch(e){
+      const c=(e&&e.code)||"";if(c)window.__authErr=c;
+      if(c==="auth/popup-closed-by-user"||c==="auth/cancelled-popup-request")throw new Error("");
+      if(c==="auth/popup-blocked"||c==="auth/operation-not-supported-in-this-environment"){await Au.signInWithRedirect(auth,p);return}
+      if(c==="auth/unauthorized-domain")throw new Error("এই সাইটের ঠিকানা Firebase-এ অনুমোদিত নয়");
+      if(c==="auth/network-request-failed")throw new Error("ইন্টারনেট সংযোগ দেখো");
+      throw new Error("লগইন হয়নি। Chrome বা Safari-তে খুলে আবার চেষ্টা করো");
+    }
+  };
+  let first=true;
+  Au.onAuthStateChanged(auth,u=>{
+    user=u;renderAcct();
+    if(u){
+      const name=effName(u);
+      if(WP.alive())WP.show(name);else if(!first)toast("স্বাগতম, "+name);
+      syncIn(u);
+      if(pendingFn){const f=pendingFn;pendingFn=null;closeGate();setTimeout(f,0)}
+    }else if(first)WP.guest();
+    first=false;
+  });
+  Au.getRedirectResult(auth).catch(()=>{});
+})();
+</script>
+
+</body>
+</html>
